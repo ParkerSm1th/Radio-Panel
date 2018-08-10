@@ -1,0 +1,389 @@
+/*
+DARK: #0b0b2f
+DARK HOVER: #0d0d38
+
+DEPARTMENT STAFF: #020b4a;
+SENIOR STAFF: #8f05a0;
+MANAGER: #006729;
+ADMINISTRATOR: #b30000;
+OWNERSHIP: #7b0000;
+
+-------------------------------------------------------------------*/
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,900');
+@import url('https://fonts.googleapis.com/css?family=Exo');
+@import url('https://fonts.googleapis.com/css?family=Viga');
+
+.dstaff-text {
+  color: #020b4a !important;
+}
+
+.dstaff-background {
+  background: #020b4a;
+  border-color: #020b4a;
+}
+
+.sstaff-text {
+  color: #8f05a0 !important;
+}
+
+.sstaff-background {
+  background: #8f05a0;
+  border-color: #8f05a0;
+}
+
+.manager-text {
+  color: #006729 !important;
+}
+
+.manager-background {
+  background: #006729;
+  border-color: #006729;
+}
+
+.admin-text {
+  color: #b30000 !important;
+}
+
+.admin-background {
+  background: #b30000;
+  border-color: #b30000;
+}
+
+.owner-text {
+  color: #7b0000 !important;
+}
+
+.owner-background {
+  background: #7b0000;
+  border-color: #7b0000;
+}
+
+.userLink {
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.btn-dark {
+  background: #0d0d38 !important;
+  border-color: #0d0d38 !important;
+}
+
+.pLogo {
+  font-family: Roboto;
+  color: white;
+  text-align: center;
+  width: auto;
+  font-weight: 300;
+  font-size: 3.3rem;
+  text-shadow: 0px 0px 10px #000;
+}
+
+.pLogoTwo {
+  font-family: Roboto;
+  color: #fff;
+  text-align: center;
+  width: auto;
+  font-weight: 300;
+  padding-top: 10px;
+  font-size: 2.3rem;
+  text-shadow: 0px 0px 10px #000;
+}
+
+.brighttheme-error {
+  background-color: #e84635;
+  background-image: none;
+  color: #fff;
+  border: 0 solid #FF1800;
+}
+
+.ui-pnotify-text {
+  font-size: 13px;
+}
+
+.brighttheme .ui-pnotify-title {
+  font-size: 15px;
+}
+
+.ui-pnotify {
+  top: auto;
+  bottom: 25px;
+}
+
+.loading {
+  opacity: 0.5;
+}
+
+.usersTitle {
+  color: #fff;
+  font-size: 20px;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.usersTable {
+  color: #fff !important;
+}
+
+.usersCard {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.dropdown-width {
+  width: 250px !important;
+}
+
+.modal {
+  display: block;
+
+  width: 600px;
+  max-width: 100%;
+
+  height: 400px;
+  max-height: 100%;
+
+  position: fixed;
+
+  z-index: 100;
+
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: display 500ms ease-in-out;
+
+  background: #0b0b2f;
+  box-shadow: 0 0 25px 1px #000;
+}
+.closed {
+  display: none;
+}
+
+.close-button {
+  position: absolute;
+  right: 0;
+  z-index: 99999;
+  height: 35px;
+  width: 35px;
+  padding: 0;
+  margin-top: 3px;
+  background: #0d0d38;
+  border: #0d0d38;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.close-button i {
+  margin: 0;
+  padding: 0;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+
+  background: rgba(0, 0, 0, 0.6);
+}
+.modal-guts {
+  top: 0;
+  left: 0;
+  color: #fff;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 10px 10px 10px 10px;
+}
+
+.modalHead {
+  background: #0d0d38;
+  height: 40px;
+  display: block;
+}
+
+.modalHead h1 {
+  display:  inline-block;
+  font-size: 25px;
+  padding-left: 15px;
+  padding-top: 5px;
+  color: #fff;
+}
+
+.profile {
+  width: 100%;
+}
+
+.profileImage {
+  text-align: center;
+}
+
+.profileImage img {
+  margin: auto;
+  height: 120px;
+  text-align: center;
+}
+
+.profile h1 {
+  text-align: center;
+}
+
+.profile h2 {
+  text-align: center;
+  font-size: 15px;
+  color: #ccc;
+}
+
+.profile span {
+  color: #ccc;
+}
+
+.profile p {
+  text-align: center;
+}
+
+.cTooltip {
+	display:inline-block;
+	position:relative
+}
+.cTooltip i {
+  color: #fff;
+}
+.cTooltip:hover { text-decoration:none }
+.cTooltip b {
+  bottom: 26px;
+  z-index: 100 !important;
+  margin: auto;
+  position: absolute;
+  display: block;
+  z-index: 98;
+  font-size: 12px;
+  transition: all 500ms ease-in-out;
+  text-align: center;
+  left: -1000px;
+  right: -1000px;
+}
+.cTooltip:hover b:after {
+  background: #000;
+  border-radius: 5px;
+  content: attr(title);
+  margin: auto;
+  padding: 5px 15px;
+  white-space: nowrap;
+  z-index: 98;
+  text-align: center;
+}
+.cTooltip:hover b:before {
+	border: solid;
+  border-color: #000000 transparent;
+  border-width: 6px 6px 0 6px;
+  bottom: -11px;
+  content: "";
+  display: block;
+  left: 50%;
+  margin-left: -6px;
+  position: absolute;
+  z-index: 102;
+}
+
+.timetable {
+  height: auto;
+  background: #0e0c39;
+  border-bottom: 1px solid #fff;
+}
+
+.timetable-group {
+  background: #0b0c2f;
+  height: auto;
+  margin: 20px;
+  padding: 10px;
+}
+
+.timetable-item {
+  background: #7700c1;
+  margin: 10px;
+  border-radius: 5px;
+  padding-bottom: 5px;
+  position: relative;
+}
+
+.timetable-item h1 {
+  font-weight: 600;
+  color: #fff;
+  padding-top: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.timetable-button {
+  text-align: center;
+  margin: 0px;
+  background: #0f0d3a;
+  border-radius: 15px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.timetable-button-u {
+  margin: 10px;
+}
+
+.timetable-button p {
+  padding: 5px;
+  margin-bottom: 0;
+}
+
+.timetable-manage {
+  text-align: center;
+  color: #fff;
+  padding-top: 5px;
+  padding-bottom: 20px;
+  margin: auto;
+  padding-right: 25px;
+  padding-left: 5px;
+}
+
+.unBook {
+  cursor: pointer;
+}
+
+.timetable-manage-o {
+  text-align: center;
+  color: #fff;
+  padding-top: 5px;
+  padding-bottom: 20px;
+  margin: auto;
+  padding-right: 25px;
+  padding-left: 2px;
+}
+
+.timetable-in {
+  margin: 0px;
+}
+
+.timetable-title {
+  text-align: center;
+  font-size: 19px;
+  padding: 10px;
+  color: #fff;
+  margin-bottom: 0px;
+}
+
+.timetable-oc {
+  background: #dc192b;
+}
+
+.timetable-eu {
+  background: #0a9c00;
+}
+
+.timetable-na {
+  background: #00a6c1;
+}
+
+.timetable-region {
+  position: absolute;
+  top: -5px;
+  right: 8px;
+}
