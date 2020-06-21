@@ -1,4 +1,5 @@
-#Custom Radio panel developed by @ParkerSm1th for KeyFM 
+# Custom Radio Panel 
+### Developed by @ParkerSm1th for **KeyFM**
 
 ## Features
 This custom panel consists of many features, which are modular and are able to be edited to the needs of any radio.
