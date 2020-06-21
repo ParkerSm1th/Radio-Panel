@@ -24,7 +24,5 @@ A few examples are:
 [![forthebadge](https://forthebadge.com/images/badges/gluten-free.svg)]()
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)]()
 [![forthebadge](https://forthebadge.com/images/badges/compatibility-betamax.svg)]()
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)]()
 [![forthebadge](https://forthebadge.com/images/badges/fuck-it-ship-it.svg)]()
-[![forthebadge](https://forthebadge.com/images/badges/gluten-free.svg)]()
 [![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)]()
