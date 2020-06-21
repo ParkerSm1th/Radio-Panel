@@ -3,6 +3,7 @@ $perm = 3;
 $media = 0;
 $radio = 0;
 $dev = 0;
+$title = "Delete User";
 include('../../includes/header.php');
 include('../../includes/config.php');
 if ($_GET['id'] == null) {
@@ -58,7 +59,6 @@ if ($row['permRole'] == 5 || $row['permRole'] == 6) {
  ?>
  <div class="card">
    <div class="card-body">
-     <h1 class="card-title">Delete User</h1>
      <form class="forms-sample" id='deleteUser' action="#">
        <div class="form-group" id='errorFieldOut' style='display: none;'>
          <span class="btn btn-danger submit-btn btn-block" id='errorField'>Login</span>
@@ -66,7 +66,7 @@ if ($row['permRole'] == 5 || $row['permRole'] == 6) {
        <div class="form-group" id='discordMsgOut' style='display: none;'>
          <p style="user-select: auto;"class="btn btn-success submit-btn btn-block" id='discordMessage'>...</p>
        </div>
-     <img style="height: 55px;border-radius: 100%;margin-bottom: 10px;" src="<?php echo $row['avatarURL']?>" onerror="this.src='https://itspower.net/v2/_assets/logo.png'" alt="image">
+     <img style="height: 55px;border-radius: 100%;margin-bottom: 10px;" src="<?php echo $row['avatarURL']?>" onerror="this.src='../images/default.png'" alt="image">
      <p class="card-description">Are you sure you want to delete <span class="<?php echo $color ?> userLink" onclick="loadProfile(<?php echo $id ?>)" style="font-size: 15px;"><?php echo $row['username'] ?></span>?</p>
      <div class="form-group">
        <button class="btn btn-success mr-2" id='submit'>Yes</button>
@@ -93,8 +93,8 @@ if ($row['permRole'] == 5 || $row['permRole'] == 6) {
 
        $.ajax({
            type: 'POST',
-           url: './scripts/deleteUser.php',
-           data: {id: <?php echo $id ?>}
+           url: './scripts/deleteUser.php?id=<?php echo $id ?>',
+           data: null
        }).done(function(response) {
          console.log(response);
          if (response == 'deleted') {

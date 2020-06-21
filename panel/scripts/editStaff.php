@@ -15,8 +15,10 @@ date_default_timezone_set('UTC');
 $date = date('jS \of F Y');
 if ($_POST['radio'] != null) {
   $radio = 1;
+  $djSays = $_POST['djSays'];
 } else {
   $radio = 0;
+  $djSays = null;
 }
 if ($_POST['media'] != null) {
   $media = 1;
@@ -64,7 +66,7 @@ if ($_POST['password'] != null) {
   $update = false;
 }
 if ($update) {
-  $stmt = $conn->prepare("UPDATE users SET username = :username, pass = :pass, permRole = :prole, radio = :radio, media = :media, inactive = :pending, region = :region, trial = :trial WHERE id = :id");
+  $stmt = $conn->prepare("UPDATE users SET username = :username, pass = :pass, permRole = :prole, radio = :radio, media = :media, inactive = :pending, region = :region, trial = :trial, djSays = :djSays WHERE id = :id");
   $stmt->bindParam(':id', $_GET['id']);
   $stmt->bindParam(':username', $_POST['username']);
   $stmt->bindParam(':pass', $pass);
@@ -74,10 +76,14 @@ if ($update) {
   $stmt->bindParam(':pending', $pending);
   $stmt->bindParam(':region', $_POST['region']);
   $stmt->bindParam(':trial', $trial);
+  $stmt->bindParam(':djSays', $djSays);
+  $stmt->execute();
+  $stmt = $conn->prepare("UPDATE sessions SET refresh = 1 WHERE user = :id");
+  $stmt->bindParam(':id', $_GET['id']);
   $stmt->execute();
   echo "updated";
 } else {
-  $stmt = $conn->prepare("UPDATE users SET username = :username, permRole = :prole, radio = :radio, media = :media, inactive = :pending, region = :region, trial = :trial WHERE id = :id");
+  $stmt = $conn->prepare("UPDATE users SET username = :username, permRole = :prole, radio = :radio, media = :media, inactive = :pending, region = :region, trial = :trial, djSays = :djSays WHERE id = :id");
   $stmt->bindParam(':id', $_GET['id']);
   $stmt->bindParam(':username', $_POST['username']);
   $stmt->bindParam(':prole', $_POST['prole']);
@@ -86,6 +92,10 @@ if ($update) {
   $stmt->bindParam(':pending', $pending);
   $stmt->bindParam(':region', $_POST['region']);
   $stmt->bindParam(':trial', $trial);
+  $stmt->bindParam(':djSays', $djSays);
+  $stmt->execute();
+  $stmt = $conn->prepare("UPDATE sessions SET refresh = 1 WHERE user = :id");
+  $stmt->bindParam(':id', $_GET['id']);
   $stmt->execute();
   echo "updated";
 }

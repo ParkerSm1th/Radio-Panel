@@ -33,7 +33,7 @@ if ($_POST['region'] != "EU" && $_POST['region'] != "NA" && $_POST['region'] != 
   exit();
 }
 $disabled = "DISABLED";
-$stmt = $conn->prepare("INSERT INTO users (username, pass, avatarURL, permRole, displayRole, radio, media, developer, inactive, hired, region) VALUES (:username, :pass, :avatarURL, '1', :displayRole, :radio, :media, '0', :inactive, :hired, :region)");
+$stmt = $conn->prepare("INSERT INTO users (username, pass, avatarURL, permRole, displayRole, radio, media, developer, inactive, hired, region, trial) VALUES (:username, :pass, :avatarURL, '1', :displayRole, :radio, :media, '0', :inactive, :hired, :region, '1')");
 $stmt->bindParam(':username', $_POST['username']);
 $stmt->bindParam(':pass', $pass);
 $stmt->bindParam(':avatarURL', $avatar);

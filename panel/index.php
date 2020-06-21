@@ -1,10 +1,20 @@
 <?php
 session_start();
 if ($_SESSION['loggedIn']['username'] == null) {
-  header("Location: ../index.php");
+  header("Location: ../index.php?ref=" . $_SERVER['REQUEST_URI']);
   exit();
 }
 include('includes/pnotify.php');
+include('includes/config.php');
+$hasDiscord = true;
+if ($_SESSION['loggedIn']['discord'] == null) {
+  $hasDiscord = false;
+}
+if (isset($_GET['welcome'])) {
+  $displayOverlay = "block";
+} else {
+  $displayOverlay = "none";
+}
 ?>
 
 <!DOCTYPE html>
@@ -13,41 +23,91 @@ include('includes/pnotify.php');
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Infinite Staff -> Panel</title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+  <title>KeyFM Staff -> Panel</title>
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-IIED/eyOkM6ihtOiQsX2zizxFBphgnv1zbe1bKA+njdFzkr6cDNy16jfIKWu4FNH" crossorigin="anonymous">
   <link rel="stylesheet" href="../vendors/iconfonts/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="../vendors/css/vendor.bundle.base.css">
   <link rel="stylesheet" href="../vendors/css/vendor.bundle.addons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="../css/token-input.css">
+  <link rel="stylesheet" href="../css/token-input-mac.css">
   <link rel="stylesheet" href="../css/pnotify.custom.css?date=<?php echo date('Y'); ?>">
   <link rel="stylesheet" href="../css/style.css?date=<?php echo date('Y'); ?>">
   <link rel="stylesheet" href="../css/custom.css?date=<?php echo date('Y'); ?>">
-  <link rel="shortcut icon" href="../images/Logo.png" />
+  <link rel="shortcut icon" href="../images/favicon.svg" />
 </head>
+<style>
+#searchDropdown {
+  position: absolute;
+  display: none;
+  border-radius: 0px 0px 5px 5px;
+  right: 0;
+  border: none;
+  width: 180px;
+  height: auto;
+  padding-bottom: 10px !important;
+  top: 30px;
+}
 
+.overlay {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  transition: all 1000ms ease-in-out;
+  opacity: 1;
+  z-index: 9000;
+}
+
+.overlayDark {
+  background: rgb(12, 27, 45);
+}
+
+.overlayGradient {
+  background: rgb(42,38,94);
+  background: linear-gradient(38deg, rgba(38, 36, 66, 0.7147233893557423) 0%, rgba(45, 45, 84, 0.55) 47%, rgba(28, 83, 165, 0.8631827731092436) 100%);
+}
+
+@media screen and (max-width: 580px) {
+  #searchInput {
+    display: none !important;
+  }
+}
+</style>
 <body>
+  <div class="overlay overlayDark" style="display: <?php echo $displayOverlay ?>"></div>
+  <div class="overlay overlayGradient" style="display: <?php echo $displayOverlay ?>"></div>
   <div class="container-scroller">
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-        <a class="navbar-brand brand-logo" href="index.php">
-          <h1 class="pLogoTwo">Infinite</h1>
+        <a class="navbar-brand brand-logo web-page" href="Staff.Dashboard">
+          <img src="../images/KeyFMWords.png">
         </a>
-        <a class="navbar-brand brand-logo-mini" href="index.php">
-          <h1 class="pLogoTwo">Infinite</h1>
+        <a class="navbar-brand brand-logo-mini web-page" href="Staff.Dashboard">
+          <img src="../images/all-white.png">
         </a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center">
         <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item">
+              <div class="form-group" style="margin-bottom: 0px !important; position: relative;">
+                <input type="search" class="form-control" style="width: 180px; border: 1px solid #112d50 !important; background: #112d50 !important;" placeholder="Search Here" id="searchInput">
+                <div class="dropdown-menu dropdown-menu-right dropdownDark navbar-dropdown" id="searchDropdown" aria-labelledby="SearchDropdown" style="">
+         
+                </div>
+              </div>
+          </li>
           <li class="nav-item dropdown">
             <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
               <i class="mdi mdi-bell"></i>
-              <span class="count" id="notificationsCount">0</span>
+              <div id="notificationsCount">
+
+              </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown" id="notifications">
 
               <a class="dropdown-item" style="width: 250px;">
                 <div class="dropdown-divider"></div>
-                <p class="mb-0 font-weight-normal float-left">You have 0 new notifications
-                </p>
+                <p class="mb-0 font-weight-normal float-left">You have 0 new notifications</p>
                 <div class="dropdown-divider"></div>
               </a>
 
@@ -56,378 +116,107 @@ include('includes/pnotify.php');
           <li class="nav-item dropdown d-none d-xl-inline-block">
             <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
               <span class="profile-text">Hello, <?php echo $_SESSION['loggedIn']['username'] ?></span>
-              <img class="img-xs rounded-circle" src="<?php echo $_SESSION['loggedIn']['avatarURL'] ?>" onerror="this.src='../images/Logo.png'" alt="Profile image">
+              <img class="img-xs rounded-circle" src="../profilePictures/<?php echo $_SESSION['loggedIn']['avatarURL'] ?>" onerror="this.src='../images/default.png'" alt="Profile image">
             </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown" style='width: 200px;'>
-              <a class="dropdown-item mt-2">
-                Manage Profile
-              </a>
-              <a class="dropdown-item">
-                Change Password
-              </a>
-              <a class="dropdown-item">
-                Warnings
-              </a>
-              <a class="dropdown-item web-page" href="Staff.Logout">
-                Logout
-              </a>
-            </div>
+            <style>
+              .dropdownDark {
+                width: 200px;
+                background: #112e4f;
+                padding-bottom: 10px !important;
+              }
+              .dropdownDark .dropdown-item {
+                color: #fff;
+              }
+              .dropdownDark .dropdown-item:hover {
+                background: #012446;
+              }
+            </style>
+            <?php if ($hasDiscord) {
+              ?>
+                <div class="dropdown-menu dropdown-menu-right dropdownDark navbar-dropdown" aria-labelledby="UserDropdown" style="padding-bottom: 10px !important">
+                  <a class="dropdown-item web-page" style="color: #fff;" href="Staff.Profile">
+                    Manage Profile
+                  </a>
+                  <a class="dropdown-item web-page" style="color: #fff;" href="Staff.ChangePass">
+                    Change Password
+                  </a>
+                  <a class="dropdown-item web-page" style="color: #fff;" href="Staff.Points">
+                    Staff Points
+                  </a>
+                  <a class="dropdown-item web-page" style="color: #fff;" href="Staff.Logout">
+                    Logout
+                  </a>
+                </div>
+              <?php
+            } else {
+              ?>
+                <div class="dropdown-menu dropdown-menu-right dropdownDark navbar-dropdown" aria-labelledby="UserDropdown" style='width: 200px;'>
+                  <a class="dropdown-item web-page" onclick="window.location='../index.php'" href="Staff.LogoutFast">
+                    Logout
+                  </a>
+                </div>
+              <?php
+            } ?>
+
           </li>
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-          <span class="icon-menu"></span>
+          <span class="icon-menu"><i class="fas fa-bars"></i></span>
         </button>
       </div>
     </nav>
     <!-- partial -->
+    <?php if ($hasDiscord) {
+      ?>
     <div class="container-fluid page-body-wrapper">
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <ul class="nav">
-          <li class="nav-item nav-profile">
-            <div class="nav-link">
-              <div class="user-wrapper">
-                <div class="profile-image">
-                  <img src="<?php echo $_SESSION['loggedIn']['avatarURL'] ?>" onerror="this.src='../images/Logo.png'" alt="profile image">
-                </div>
-                <div class="text-wrapper">
-                  <p class="profile-name userLink" onclick="loadProfile(<?php echo $_SESSION['loggedIn']['id'] ?>)"><?php echo $_SESSION['loggedIn']['username'] ?></p>
-                  <div>
-                    <small class="designation text-muted"><?php
-                    if ($_SESSION['loggedIn']['radio'] == '1') {
-                      ?>
-                      <span class="cTooltip"><i class='fa fa-microphone-alt'></i><b title="Radio DJ"></b></span>
-                      <?php
-                    }
-                    if ($_SESSION['loggedIn']['media'] == '1') {
-                      ?>
-                      <span class="cTooltip"><i class='fa fa-newspaper'></i><b title="Media Reporter"></b></span>
-                      <?php
-                    }
-                    if ($_SESSION['loggedIn']['trial'] == '1') {
-                      ?>
-                      <span class="cTooltip"><i class="fas fa-clipboard-list"></i><b title="Trial"></b></span>
-                      <?php
-                    }
-                    if ($_SESSION['loggedIn']['developer'] == '1') {
-                      ?>
-                      <span class="cTooltip"><i class='fas fa-code'></i><b title="Developer"></b></span>
-                      <?php
-                    }
-                    if ($_SESSION['loggedIn']['permRole'] == '2') {
-                      ?>
-                      <span class="cTooltip"><i class='far fa-eye'></i><b title="Senior Staff"></b></span>
-                      <?php
-                    }
-                    if ($_SESSION['loggedIn']['permRole'] == '3') {
-                      ?>
-                      <span class="cTooltip"><i class='fas fa-cog'></i><b title="Manager"></b></span>
-                      <?php
-                    }
-                    if ($_SESSION['loggedIn']['permRole'] == '4') {
-                      ?>
-                      <span class="cTooltip"><i class='fas fa-key'></i><b title="Administrator"></b></span>
-                      <?php
-                    }
-                    if ($_SESSION['loggedIn']['permRole'] >= '5') {
-                      ?>
-                      <span class="cTooltip"><i class='fas fa-money-check'></i><b title="Owner"></b></span>
-                      <?php
-                    }
-                     ?></small>
-                  </div>
-                </div>
-              </div>
-              <a href="Staff.Logout" class="web-page"><span class="btn btn-danger btn-block">Logout</button></a>
-            </div>
-          </li>
-          <?php
-            $permRole = $_SESSION['loggedIn']['permRole'];
-            $radio = $_SESSION['loggedIn']['radio'];
-            $developer = $_SESSION['loggedIn']['developer'];
-            $media = $_SESSION['loggedIn']['media'];
-            if ($permRole >= 1) {
-              ?>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-staff" aria-expanded="false" aria-controls="ui-staff">
-                  <i class="menu-icon fa fa-user"></i>
-                  <span class="menu-title">Staff</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="ui-staff">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Staff.Dashboard">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Staff.Rules">Rules</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Staff.Warnings">My Warnings</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Staff.Contact">Staff Contact</a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <?php
-            }
-            if ($permRole >= 1 && $radio == '1') {
-              ?>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-dj" aria-expanded="false" aria-controls="ui-dj">
-                  <i class="menu-icon fa fa-microphone-alt"></i>
-                  <span class="menu-title">Radio DJ</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="ui-dj">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Radio.Requests">Requests</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Radio.Timetable">Book A Slot</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Radio.Slots">My Slots</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Radio.DJSays">Set DJ Says</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Radio.Rules">Radio Rules</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Radio.Connection">Connection Information</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Radio.Banned">Banned Songs</a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <?php
-            }
-            if ($permRole >= 1 && $media == '1') {
-              ?>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-media" aria-expanded="false" aria-controls="ui-media">
-                  <i class="menu-icon fa fa-newspaper"></i>
-                  <span class="menu-title">Media Reporter</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="ui-media">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Media.New">New Article</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Media.Articles">My Articles</a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <?php
-            }
-            if ($permRole >= 2 && $media == '1') {
-              ?>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-meditor" aria-expanded="false" aria-controls="ui-meditor">
-                  <i class="menu-icon fas fa-pen"></i>
-                  <span class="menu-title">Media Editor</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="ui-meditor">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Editor.Articles">All Articles</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Editor.Approve">Approve Articles</a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <?php
-            }
-            if ($permRole >= 2 && $radio == '1') {
-              ?>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-hdj" aria-expanded="false" aria-controls="ui-hdj">
-                  <i class="menu-icon far fa-eye"></i>
-                  <span class="menu-title">Head DJ</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="ui-hdj">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="HDJ.Warn">Issue Warning</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="HDJ.Warnings">All Warnings</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="HDJ.Songs">Song History</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="HDJ.Kick">Kick DJ</a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <?php
-            }
-            if ($permRole >= 3) {
-              ?>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-manager" aria-expanded="false" aria-controls="ui-manager">
-                  <i class="menu-icon fas fa-cog"></i>
-                  <span class="menu-title">Manager</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="ui-manager">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Manager.Warn">Issue Warning</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Manager.Warns">All Warnings</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Manager.Trialists">Trialists</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Manager.Staff">Manage Staff</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Manager.New">New Staff Member</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Manager.Requests">Manage Requests</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Manager.Connection">Edit Connection Info</a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <?php
-            }
-            if ($permRole >= 4) {
-              ?>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-admin" aria-expanded="false" aria-controls="ui-admin">
-                  <i class="menu-icon fas fa-key"></i>
-                  <span class="menu-title">Administrator</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="ui-admin">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Admin.Warn">Issue Warning</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Admin.Warns">All Warnings</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Admin.Notification">Send Global Notification</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Dev.ActiveUsers">Logged In Users</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Admin.Log">Panel Logs</a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <?php
-            }
-            if ($developer == '1') {
-              ?>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-dev" aria-expanded="false" aria-controls="ui-dev">
-                  <i class="menu-icon fas fa-code"></i>
-                  <span class="menu-title">Developer</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="ui-dev">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Dev.Notifications">Notifications</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Dev.Log">Panel Logs</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Dev.Timetable">Timetable</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Dev.ActiveUsers">Logged In Users</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Dev.Server">Radio Server</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Dev.Users">Manager Users</a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <?php
-            }
-            if ($permRole >= 5) {
-              ?>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-owner" aria-expanded="false" aria-controls="ui-owner">
-                  <i class="menu-icon fas fa-money-check"></i>
-                  <span class="menu-title">Ownership</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="ui-owner">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                      <a class="nav-link web-page" href="Dev.Server">Radio Server</a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <?php
-            }
-          ?>
-        </ul>
+        <?php include('includes/navbar.php'); ?>
       </nav>
       <!-- partial -->
       <div class="main-panel">
+        <h1 id="pageTitle" class="page-title m-l-25"><i class="fas fa-circle-notch fa-spin"></i></h1>
         <div class="content-wrapper" id="content">
 
         </div>
         <!-- content-wrapper ends -->
-        <!-- partial:partials/_footer.html -->
-        <footer class="footer">
-          <div class="container-fluid clearfix">
-            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2018
-              <a href="http://www.yeetdev.com" target="_blank">Parker Smith</a>. All rights reserved.</span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Made for infinite.
-            </span>
-          </div>
-        </footer>
-        <!-- partial -->
       </div>
       <!-- main-panel ends -->
     </div>
+  <?php } else {
+    ?>
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <!-- partial -->
+      <div class="main-panel" style="width: 100% !important;">
+        <div class="content-wrapper">
+          <div class="card discordVerify">
+            <div class="card-body text-center">
+              <h3 style="text-align: center" class="text-white">Welcome to KeyFM!</h3>
+              <h4 style="text-align: center" class="text-white">The first step to getting you setup is linking your discord!</h4>
+              <div id="discordArea">
+                <button style="padding-top: 10px" class="btn btn-success" id="linkDiscord">Link My Discord</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+  <?php } ?>
     <!-- page-body-wrapper ends -->
   </div>
   <div class="modal-overlay closed" id="modal-overlay"></div>
   <div class="modal closed" id="profileModal">
     <div class="modalHead">
-      <h1>Profile</h1>
    		<button onclick="closeProfile()" class="btn btn-success close-button profile-close-button" id="profile-close-button"><i class="fa fa-times"></i></button>
       </div>
   <div class="modal-guts" id='profileModalContent'>
-    <h1>Loading Profile..</h1>
-
+    <div class="loadingProfile">
+      <i class="fas fa-circle-notch fa-spin" style="color: #fff; padding: 8px; font-size: 35px;"></i>
+      <h1>Loading Profile..</h1>
+    </div>
   </div>
 </div>
   <!-- container-scroller -->
@@ -435,6 +224,7 @@ include('includes/pnotify.php');
   <!-- plugins:js -->
   <script src="../vendors/js/vendor.bundle.base.js"></script>
   <script src="../vendors/js/vendor.bundle.addons.js"></script>
+  <script src="../js/jquery.tokeninput.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page-->
   <!-- End plugin js for this page-->
@@ -447,32 +237,91 @@ include('includes/pnotify.php');
   <!-- End custom js for this page-->
   <script type="text/javascript" src="urlRouting.js"></script>
   <script type="text/javascript" src="../js/pnotify.custom.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
     urlRoute
-      .folderUrl('/newPanel3939d/panel')
+      .folderUrl('/panel')
       .setPreviousCode('Staff.Dashboard')
-      .setBaseUrl('http://infiniteradio.net/newPanel3939d/panel')
-      .checkCurrent('http://infiniteradio.net/newPanel3939d/panel');
+      .setBaseUrl('https://staff.keyfm.net/panel')
+      .checkCurrent('https://staff.keyfm.net/panel');
     notifications();
     var timeoutno = setInterval(notifications, 5000);
     function notifications () {
       $('#notifications').load('scripts/notifications.php');
       $('#notificationsCount').load('scripts/notificationCount.php');
     }
+    $(".overlay").css("opacity", "0");
+    setTimeout(function() {
+      $(".overlay").css("display", "none");
+    }, 1000);
+
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
 
 
     function login() {
-      window.location = 'http://infiniteradio.net/_$new$panel_';
+      window.location = 'https://staff.keyfm.net/';
     }
+
+    function refreshNav() {
+      $("#sidebar").load('includes/navbar.php');
+    }
+
+
+    $("#linkDiscord").on("click", function() {
+      var params = 'scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no, width=400,height=750,left=100,top=4000';
+
+      let popUp = open('https://discordapp.com/api/oauth2/authorize?client_id=706667108930551899&scope=identify&response_type=code&redirect_uri=http%3A%2F%2Fvps.parkersmith.io%3A3200%2Fdiscord%2Fcallback&state=<?php echo $_SESSION['loggedIn']['id']?>', 'Link Discord', params);
+      $("#discordArea").html(`
+        <i class="fas fa-circle-notch fa-spin" style="color: #fff; margin-top: 30px; font-size: 35px;"></i>
+        `);
+      setInterval(function() {
+        $.ajax({
+            type: 'POST',
+            url: 'scripts/checkDiscord.php'
+        }).done(function(response) {
+          if (response == 1) {
+            popUp.close();
+            $("#discordArea").html(`
+              <i class="fas fa-check manager-text" style="margin-top: 30px; font-size: 35px;"></i>
+              <h4 class="text-white" style="margin-top: 10px;">Success! You will now be logged out of the panel, log back in and check discord!</h4>
+            `);
+            setTimeout(function() {
+              window.location = "logout.php";
+            }, 2000)
+          }
+        });
+      }, 1000)
+    });
 
     var profileModal = document.querySelector("#profileModal");
     var modalOverlay = document.querySelector("#modal-overlay");
     var profileCloseButton = document.querySelector(".profile-close-button");
 
     function closeProfile() {
-      profileModal.classList.toggle("closed");
-      modalOverlay.classList.toggle("closed");
-      $('#profileModalContent').html("<h1>Loading Profile..</h1>");
+      profileModal.classList.add("closed");
+      modalOverlay.classList.add("closed");
+      $('#profileModalContent').html(`
+        <div class="loadingProfile">
+            <i class="fas fa-circle-notch fa-spin" style="color: #fff; padding: 8px; font-size: 35px;"></i>
+            <h1>Loading Profile..</h1>
+          </div>
+        </div>
+        `);
     }
 
 
@@ -481,6 +330,61 @@ include('includes/pnotify.php');
       modalOverlay.classList.remove("closed");
       $('#profileModalContent').load('./scripts/getProfile.php?id=' + id);
     }
+
+    function loadDropDownProfile(id) {
+      $('#searchInput').val("");
+      $("#searchDropdown").css("display", "none");
+      $("#searchDropdown").html('');
+      profileModal.classList.remove("closed");
+      modalOverlay.classList.remove("closed");
+      $('#profileModalContent').load('./scripts/getProfile.php?id=' + id);
+    }
+
+    function loadDropDownPage(url) {
+      $('#searchInput').val("");
+      $("#searchDropdown").css("display", "none");
+      $("#searchDropdown").html('');
+      urlRoute.loadPage(url);
+    }
+
+    $("#searchInput").on('keyup', function() {
+      var query = $('#searchInput').val();
+      if (query == "") {
+        $("#searchDropdown").css("display", "none");
+        $("#searchDropdown").html('');
+        return;
+      }
+      $("#searchDropdown").css("display", "block");
+      $("#searchDropdown").html(`
+      <a class="dropdown-item web-page" style="color: #fff; text-align: center">
+        <i class="fas fa-circle-notch fa-spin" style="color: #fff; padding: 8px; font-size: 13px;"></i>
+      </a>
+      `);
+      $.ajax({
+          type: "GET",
+          url: "scripts/findUser.php?q=" + query
+      })
+      .then(function(response) {
+        var results = JSON.parse(response);
+        if (results.length == 0) {
+          $("#searchDropdown").html(`
+          <a class="dropdown-item web-page" style="color: #fff; text-align: center">
+            Nothing found
+          </a>
+          `);
+          return true;
+        }
+        let output = '';
+        for (var i = 0; i < results.length; i++) {
+          let result = results[i];
+          output += `<a class="dropdown-item" style="color: #fff; font-size: 14px;text-align: center; cursor: pointer; padding: 8px;" onclick="${result.action}">
+            ${result.title}
+          </a>`;
+        }
+        $("#searchDropdown").html(output);
+
+      });
+    });
   </script>
 </body>
 

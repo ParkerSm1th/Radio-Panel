@@ -1,0 +1,105 @@
+.auth-bg-1 {
+  background: rgb(42,38,94);
+  background: linear-gradient(38deg, rgba(38, 36, 66, 0.7147233893557423) 0%, rgba(45, 45, 84, 0.55) 47%, rgba(28, 83, 165, 0.8631827731092436) 100%);
+}
+.auth.theme-one .auto-form-wrapper {
+  background: #7575751a;
+  padding: 40px 40px 10px;
+  border-radius: 4px;
+  box-shadow: none !important;
+}
+.form-group label {
+  font-size: 13px;
+  line-height: 1;
+  vertical-align: top;
+  color: #ccc6c6 !important;
+}
+.auth.theme-one .auto-form-wrapper .form-group .input-group .form-control {
+  background: transparent;
+  border-left: none;
+  border-top: none;
+  border-right: none;
+  border-radius: 0;
+  color: #fff;
+}
+.auth.theme-one .auto-form-wrapper .form-group .input-group .input-group-append {
+  border-left: none;
+  background: transparent;
+}
+.auth.theme-one .auto-form-wrapper .form-group .input-group .input-group-append .input-group-text {
+  border-top: 0;
+  border-radius: 0;
+  border-right: 0;
+}
+.btn-primary {
+  background: #212f79 !important;
+  border-color: #212f79 !important;
+}
+.pLogo {
+  text-align: center;
+  margin: auto;
+  margin-bottom: 20px;
+}
+.pLogo img {
+  height: 60px;
+  transform: rotate(0deg);
+}
+.w-100 {
+  width: 100% !important;
+  margin: auto;
+}
+.user-img {
+  height: 130px;
+  width: 130px;
+  border-radius: 100%;
+  margin: auto;
+  margin-top: 27px;
+  text-align: center;
+  border: 3px solid rgba(28, 139, 129, 0);
+  box-shadow: rgb(70, 70, 70) 0px 0px 15px 0px;
+  transition: all 300ms ease-in-out;
+}
+#loginConfirm {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  transform: translate(-50%);
+  transition: opacity 500ms ease-in-out;
+  z-index: -1;
+}
+#loginConfirm .auto-form-wrapper {
+  background: #7575751a;
+  height: 275px;
+}
+.notSeen {
+  text-align: center;
+}
+.notSeen img {
+  margin-top: 0px !important;
+}
+.notSeen h1 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+  margin-top: 20px;
+}
+.content-wrapper {
+  background: transparent !important;
+}
+#content {
+  margin: auto;
+  width: 100%;
+  transition: opacity 300ms ease-in-out;
+}
+
+.auth.theme-one .auto-form-wrapper {
+  margin: auto;
+  width: 90vw;
+  max-width: 640px;
+}
+
+@media screen and (max-width: 770px) {
+  #imgDiv {
+    display: none;
+  }
+}

@@ -3,6 +3,7 @@ $perm = 3;
 $media = 0;
 $radio = 0;
 $dev = 0;
+$title = "Edit User";
 include('../../includes/header.php');
 include('../../includes/config.php');
 if ($_GET['id'] == null) {
@@ -49,18 +50,29 @@ if ($row['permRole'] == 4) {
   }
 }
 
-if ($row['permRole'] == 5 || $row['permRole'] == 6 && $_SESSION['loggedIn']['developer'] != 1) {
+if ($row['permRole'] == 5) {
+  if ($_SESSION['loggedIn']['permRole'] >= 6) {
+    $color = 'executive-text';
+  } else {
+    ?>
+      <script>urlRoute.loadPage("Manager.Staff")</script>
+    <?php
+    exit();
+  }
+}
+
+if ($row['permRole'] == 6 && $_SESSION['loggedIn']['developer'] != 1) {
   ?>
     <script>urlRoute.loadPage("Manager.Staff")</script>
   <?php
   exit();
-} else if ($row['permRole'] == 5 || $row['permRole'] == 6 && $_SESSION['loggedIn']['developer'] == 1) {
+} else if ($row['permRole'] == 6 && $_SESSION['loggedIn']['developer'] == 1) {
   $color = 'owner-text';
 }
  ?>
 <div class="card">
   <div class="card-body">
-    <h4 class="card-title">Edit <span class="<?php echo $color ?> userLink" onclick="loadProfile(<?php echo $id ?>)"><?php echo $row['username'] ?></span></h4>
+    <h4 class="card-title"><span class="<?php echo $color ?> userLink" onclick="loadProfile(<?php echo $id ?>)"><?php echo $row['username'] ?></span></h4>
     <form class="forms-sample" id='editStaff' action="#">
       <div class="form-group" id='errorFieldOut' style='display: none;'>
         <span class="btn btn-danger submit-btn btn-block" id='errorField'>Login</span>
@@ -89,6 +101,13 @@ if ($row['permRole'] == 5 || $row['permRole'] == 6 && $_SESSION['loggedIn']['dev
           <i class="input-helper"></i></label>
         </div>
       </div>
+      <?php if ($row['radio'] == 1) {
+        ?>
+        <div class="form-group">
+          <label for="username">DJ Says</label>
+          <input type="text" class="form-control" name='djSays' value="<?php echo $row['djSays'] ?>" id="djSays">
+        </div>
+      <?php } ?>
       <div class="form-group">
         <label for="region">Region</label>
         <select name='region' class="form-control" id="region" value="<?php echo $row['region']?>">
@@ -115,9 +134,15 @@ if ($row['permRole'] == 5 || $row['permRole'] == 6 && $_SESSION['loggedIn']['dev
             <?php
           }
           ?>
+          <?php if ($_SESSION['loggedIn']['permRole'] >= 6) {
+            ?>
+              <option <?php if ($row['permRole'] == "5") echo "selected"?> value='5'>Executive</option>
+            <?php
+          }
+          ?>
           <?php if ($_SESSION['loggedIn']['developer'] == 1) {
             ?>
-              <option <?php if ($row['permRole'] >= "5") echo "selected"?> value='6'>Owner</option>
+              <option <?php if ($row['permRole'] == "6") echo "selected"?> value='6'>Owner</option>
             <?php
           }
           ?>
@@ -139,6 +164,7 @@ if ($row['permRole'] == 5 || $row['permRole'] == 6 && $_SESSION['loggedIn']['dev
         <button class="btn btn-success mr-2" id='submit'>Submit</button>
         <a href="Manager.Staff" class="web-page" id='new' style="display: none;"><button class="btn btn-success mr-2">Back to staff</button></a>
         <a href="Manager.Staff" class="web-page" id='cancel'><button class="btn btn-light">Cancel</button></a>
+        <a href="#" id='delete'><button class="btn btn-danger">Delete User</button></a>
       </div>
 
     </form>
@@ -163,6 +189,7 @@ $(function() {
       var role = $('#role');
       var prole = $('#prole');
       var trial = $('#trial');
+      var djSays = $('#djSays');
       console.log(prole.val());
       console.log(region.val());
       console.log(role.val());
@@ -171,7 +198,7 @@ $(function() {
       console.log(pending.val());
       console.log(trial.val());
       // (role.val() != "Radio DJ" && role.val() != "Media Reporter" && role.val() != "Media Editor" && role.val() != "Head DJ" && role.val() != "Manager" && role.val() != "Administrator" && role.val() != "Owner" && role.val() != "Developer")
-      if ((region.val() != "Global" && region.val() != "EU" && region.val() != "NA" && region.val() != "OC") || (prole.val() != "1" && prole.val() != "2" && prole.val() != "3" && prole.val() != "4" && prole.val() != "6") || username.val() == "" || username.val() == null || (radio.val() == 'off' && media.val() == 'off')) {
+      if ((region.val() != "Global" && region.val() != "EU" && region.val() != "NA" && region.val() != "OC") || (prole.val() != "1" && prole.val() != "2" && prole.val() != "3" && prole.val() != "4" && prole.val() != "5" && prole.val() != "6") || username.val() == "" || username.val() == null || (radio.val() == 'off' && media.val() == 'off')) {
         error = true;
         errorMessage = 'Please fill in all fields correctly.';
       }
@@ -206,4 +233,8 @@ $(function() {
       });
     });
 });
+
+$(document).on("click","#delete", function() {
+    urlRoute.loadPage("Manager.DeleteUser?id=<?php echo $id ?>")
+  });
 </script>

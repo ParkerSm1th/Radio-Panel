@@ -6,7 +6,7 @@ if ($_SESSION['loggedIn'] == null) {
 }
 include('../includes/config.php');
 $id = $_POST['id'];
-$stmt = $conn->prepare("UPDATE notifications SET active = 0 WHERE id = :id");
+$stmt = $conn->prepare("DELETE FROM notifications WHERE id = :id");
 $stmt->bindParam(':id', $id);
 $stmt->execute();
 echo "dl";

@@ -1,6 +1,7 @@
 (function($) {
   'use strict';
   $(function() {
+    
     var sidebar = $('.sidebar');
 
     //Add active class to nav-link based on url dynamically

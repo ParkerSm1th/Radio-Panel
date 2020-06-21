@@ -3,6 +3,7 @@ $perm = 1;
 $media = 0;
 $radio = 1;
 $dev = 0;
+$title = "Timetable";
 include('../../includes/header.php');
 include('../../includes/config.php');
 date_default_timezone_set('Europe/London');
@@ -28,16 +29,29 @@ if ($date == 5) {
 if ($date == 6) {
   $day6 = "show";
 }
+$currentHour = date( 'H' );
+$currentDay = $date;
  ?>
-
-<div class="card">
-  <div class="card-body">
-    <h4 class="card-title">Timetable</h4>
+<style>
+.card-title-right {
+  float: right !important;
+  margin-top: -52px;
+  color: #fff;
+  font-size: 23px;
+}
+.card-title-right .badge {
+  font-size: 21px;
+}
+.autoClose {
+    background: transparent !important;
+}
+</style>
+    <div class="fullTT">
     <div class="timetable">
-      <a data-toggle="collapse" href="#tt-0" aria-expanded="false" aria-controls="tt-0">
+      <a data-toggle="collapse" href="#tt-0" class="cShow" aria-expanded="false" aria-controls="tt-0">
         <h1 class="card-title timetable-title">Monday</h1>
       </a>
-      <div class="collapse <?php echo $day0 ?>" id="tt-0">
+      <div class="collapse autoClose <?php echo $day0 ?>" id="tt-0">
       <div class="row">
         <div class="col-md-3">
           <div class="timetable-group">
@@ -48,6 +62,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -71,17 +94,29 @@ if ($date == 6) {
                     if ($row2['permRole'] == 6) {
                       $color = 'towner-text';
                     }
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 4) {
@@ -92,7 +127,27 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+              if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+                ?>
+                  <h1 class="nowTime">NOW!</h1>
+                <?php
+                } else {
+                 ?>
+                  <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
+                 <?php
+                  }
+              ?>
               <?php
               if ($op != null) {
                 ?>
@@ -101,8 +156,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div>
-                <div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -167,6 +221,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+                $start = $row['timestart'];
+                $day = $row['day'];
+                $disabled = "book";
+                if ($start < $currentHour && $day == $currentDay) {
+                  $disabled = 'disabled';
+                }
+                if ($day < $currentDay) {
+                  $disabled = 'disabled';
+                }
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -188,17 +251,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+                    $booked = 'Cover';
+                  } else {
                     $booked = 'Book';
+                  }
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+                    $booked = 'Cover';
+                  } else {
+                    $booked = 'Book';
+                  }
                   $button = true;
                 }
                 if ($row['timestart'] > 8) {
@@ -209,7 +284,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -218,7 +303,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -283,6 +368,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -304,17 +398,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] == 12) {
@@ -328,7 +434,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -337,7 +453,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -402,6 +518,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -423,17 +548,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 21) {
@@ -444,7 +581,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -453,7 +600,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -512,10 +659,10 @@ if ($date == 6) {
       </div>
     </div></div>
     <div class="timetable">
-      <a data-toggle="collapse" href="#tt-1" aria-expanded="false" aria-controls="tt-1">
+      <a data-toggle="collapse" href="#tt-1" class="cShow" aria-expanded="false" aria-controls="tt-1">
         <h1 class="card-title timetable-title">Tuesday</h1>
       </a>
-      <div class="collapse <?php echo $day1 ?>" id="tt-1">
+      <div class="collapse autoClose <?php echo $day1 ?>" id="tt-1">
       <div class="row">
         <div class="col-md-3">
           <div class="timetable-group">
@@ -526,6 +673,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -549,17 +705,29 @@ if ($date == 6) {
                     if ($row2['permRole'] == 6) {
                       $color = 'towner-text';
                     }
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 4) {
@@ -570,7 +738,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -579,8 +757,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div>
-                <div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -645,6 +822,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -666,17 +852,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] > 8) {
@@ -687,7 +885,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -696,7 +904,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -761,6 +969,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -782,17 +999,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] == 12) {
@@ -806,7 +1035,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -815,7 +1054,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -880,6 +1119,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -901,17 +1149,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 21) {
@@ -922,7 +1182,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -931,7 +1201,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -990,10 +1260,10 @@ if ($date == 6) {
       </div>
     </div></div>
     <div class="timetable">
-      <a data-toggle="collapse" href="#tt-2" aria-expanded="false" aria-controls="tt-2">
+      <a data-toggle="collapse" href="#tt-2" class="cShow" aria-expanded="false" aria-controls="tt-2">
         <h1 class="card-title timetable-title">Wednesday</h1>
       </a>
-      <div class="collapse <?php echo $day2 ?>" id="tt-2">
+      <div class="collapse autoClose <?php echo $day2 ?>" id="tt-2">
       <div class="row">
         <div class="col-md-3">
           <div class="timetable-group">
@@ -1004,6 +1274,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -1027,17 +1306,29 @@ if ($date == 6) {
                     if ($row2['permRole'] == 6) {
                       $color = 'towner-text';
                     }
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 4) {
@@ -1048,7 +1339,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -1057,8 +1358,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div>
-                <div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -1123,6 +1423,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -1144,17 +1453,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] > 8) {
@@ -1165,7 +1486,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -1174,7 +1505,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -1239,6 +1570,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -1260,17 +1600,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] == 12) {
@@ -1284,7 +1636,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -1293,7 +1655,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -1358,6 +1720,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -1379,17 +1750,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 21) {
@@ -1400,7 +1783,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -1409,7 +1802,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -1468,10 +1861,10 @@ if ($date == 6) {
       </div>
     </div></div>
     <div class="timetable">
-      <a data-toggle="collapse" href="#tt-3" aria-expanded="false" aria-controls="tt-3">
+      <a data-toggle="collapse" href="#tt-3" class="cShow" aria-expanded="false" aria-controls="tt-3">
         <h1 class="card-title timetable-title">Thursday</h1>
       </a>
-      <div class="collapse <?php echo $day3 ?>" id="tt-3">
+      <div class="collapse autoClose <?php echo $day3 ?>" id="tt-3">
       <div class="row">
         <div class="col-md-3">
           <div class="timetable-group">
@@ -1482,6 +1875,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -1505,17 +1907,29 @@ if ($date == 6) {
                     if ($row2['permRole'] == 6) {
                       $color = 'towner-text';
                     }
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 4) {
@@ -1526,7 +1940,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -1535,8 +1959,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div>
-                <div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -1601,6 +2024,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -1622,17 +2054,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+  $booked = $row2['username'];
+} else {
+  $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+}
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] > 8) {
@@ -1643,7 +2087,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -1652,7 +2106,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -1717,6 +2171,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -1738,17 +2201,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+  $booked = $row2['username'];
+} else {
+  $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+}
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] == 12) {
@@ -1762,7 +2237,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -1771,7 +2256,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -1836,6 +2321,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -1857,17 +2351,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 21) {
@@ -1878,7 +2384,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -1887,7 +2403,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -1946,10 +2462,10 @@ if ($date == 6) {
       </div>
     </div></div>
     <div class="timetable">
-      <a data-toggle="collapse" href="#tt-4" aria-expanded="false" aria-controls="tt-4">
+      <a data-toggle="collapse" href="#tt-4" class="cShow" aria-expanded="false" aria-controls="tt-4">
         <h1 class="card-title timetable-title">Friday</h1>
       </a>
-      <div class="collapse <?php echo $day4 ?>" id="tt-4">
+      <div class="collapse autoClose <?php echo $day4 ?>" id="tt-4">
       <div class="row">
         <div class="col-md-3">
           <div class="timetable-group">
@@ -1960,6 +2476,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -1983,17 +2508,29 @@ if ($date == 6) {
                     if ($row2['permRole'] == 6) {
                       $color = 'towner-text';
                     }
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 4) {
@@ -2004,7 +2541,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -2013,8 +2560,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div>
-                <div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -2079,6 +2625,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -2100,17 +2655,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] > 8) {
@@ -2121,7 +2688,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -2130,7 +2707,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -2195,6 +2772,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -2216,17 +2802,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] == 12) {
@@ -2240,7 +2838,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -2249,7 +2857,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -2314,6 +2922,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -2335,17 +2952,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 21) {
@@ -2356,7 +2985,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -2365,7 +3004,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -2424,10 +3063,10 @@ if ($date == 6) {
       </div>
     </div></div>
     <div class="timetable">
-      <a data-toggle="collapse" href="#tt-5" aria-expanded="false" aria-controls="tt-5">
+      <a data-toggle="collapse" href="#tt-5" class="cShow" aria-expanded="false" aria-controls="tt-5">
         <h1 class="card-title timetable-title">Saturday</h1>
       </a>
-      <div class="collapse <?php echo $day5 ?>" id="tt-5">
+      <div class="collapse autoClose <?php echo $day5 ?>" id="tt-5">
       <div class="row">
         <div class="col-md-3">
           <div class="timetable-group">
@@ -2438,6 +3077,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -2461,17 +3109,29 @@ if ($date == 6) {
                     if ($row2['permRole'] == 6) {
                       $color = 'towner-text';
                     }
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 4) {
@@ -2482,7 +3142,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -2491,8 +3161,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div>
-                <div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -2557,6 +3226,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -2578,17 +3256,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] > 8) {
@@ -2599,7 +3289,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -2608,7 +3308,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -2673,6 +3373,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -2694,17 +3403,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] == 12) {
@@ -2718,7 +3439,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -2727,7 +3458,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -2792,6 +3523,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -2813,17 +3553,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 21) {
@@ -2834,7 +3586,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -2843,7 +3605,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -2901,11 +3663,11 @@ if ($date == 6) {
         </div>
       </div>
     </div></div>
-    <div class="timetable">
-      <a data-toggle="collapse" href="#tt-6" aria-expanded="false" aria-controls="tt-6">
+    <div class="timetable" style="border-bottom: none !important;">
+      <a data-toggle="collapse" href="#tt-6" class="cShow" aria-expanded="false" aria-controls="tt-6">
         <h1 class="card-title timetable-title">Sunday</h1>
       </a>
-      <div class="collapse <?php echo $day6 ?>" id="tt-6">
+      <div class="collapse autoClose <?php echo $day6 ?>" id="tt-6">
       <div class="row">
         <div class="col-md-3">
           <div class="timetable-group">
@@ -2916,6 +3678,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -2939,17 +3710,29 @@ if ($date == 6) {
                     if ($row2['permRole'] == 6) {
                       $color = 'towner-text';
                     }
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 4) {
@@ -2960,7 +3743,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -2969,8 +3762,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div>
-                <div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -3035,6 +3827,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -3056,17 +3857,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] > 8) {
@@ -3077,7 +3890,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -3086,7 +3909,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -3151,6 +3974,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -3172,17 +4004,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] == 12) {
@@ -3196,7 +4040,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -3205,7 +4059,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -3270,6 +4124,15 @@ if ($date == 6) {
 
               foreach($stmt as $row) {
                 $booked = $row['booked'];
+$start = $row['timestart'];
+$day = $row['day'];
+$disabled = "book";
+if ($start < $currentHour && $day == $currentDay) {
+  $disabled = 'disabled';
+}
+if ($day < $currentDay) {
+  $disabled = 'disabled';
+}
                 if ($booked != '0') {
                   $stmt = $conn->prepare("SELECT * FROM users WHERE id = '$booked'");
                   $stmt->execute();
@@ -3291,17 +4154,29 @@ if ($date == 6) {
                   }
                   $own = false;
                   if ($row2 != null) {
-                    $booked = $row2['username'];
+                    if ($row['booked_type'] == '0') {
+                      $booked = $row2['username'];
+                    } else {
+                      $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
                     }
                   } else {
-                    $booked = 'Book';
+                    if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                     $button = true;
                   }
                 } else {
-                  $booked = 'Book';
+                  if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  $booked = 'Cover';
+} else {
+  $booked = 'Book';
+}
                   $button = true;
                 }
                 if ($row['timestart'] < 21) {
@@ -3312,7 +4187,17 @@ if ($date == 6) {
                 }
                 ?>
             <div class="timetable-item <?php echo $op ?>">
-              <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+              <?php
+if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
+  ?>
+    <h1 class="nowTime">NOW!</h1>
+  <?php
+  } else {
+   ?>
+    <h1><?php echo $row['timestart'] ?>:00-<?php echo $row['timeend'] ?>:00</h1>
+   <?php
+    }
+?>
               <?php
               if ($op != null) {
                 ?>
@@ -3321,7 +4206,7 @@ if ($date == 6) {
               }
               if ($button) {
                 ?>
-                <div><div class="timetable-button timetable-button-u book" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
+                <div><div class="<?php echo $disabled ?> timetable-button timetable-button-u" data-id="<?php echo $row['id'] ?>"><p><?php echo $booked ?></p></div></div>
                 <?php
               } else {
                 if ($own) {
@@ -3381,9 +4266,11 @@ if ($date == 6) {
     </div></div>
   </div>
 </div>
-</div>
 
 <script>
+$(".cShow").click( function(e) {
+    jQuery('.autoClose').collapse('hide');
+});
 $(document).on('click','.book',function(){
   var object = $(this);
   var thing = this;
@@ -3410,11 +4297,24 @@ $(document).on('click','.book',function(){
           </div>
         </div>
       </div>`);
+    } else if (response == 'covered') {
+      object.html("<p><?php echo $_SESSION['loggedIn']['username']?></p>");
+      object.parent().html(`<div class="row timetable-in">
+        <div class='col-10'>
+          <div onclick='loadProfile(<?php echo $_SESSION['loggedIn']['id']?>)' class="userLink timetable-button"><p><span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> <?php echo $_SESSION['loggedIn']['username'] ?></p></div>
+        </div>
+        <div class="col-2" style="padding: 0;">
+          <div class="timetable-manage-o">
+            <div class="row">
+              <div class="col-6">
+                <i data-id="${thing.dataset.id}" class="unBook far fa-times-circle"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`);
     } else {
       object.html('<p><i class="fas fa-times" style="color: #fff; font-size: 13px;"></i> Failed</p>');
-      setTimeout(function () {
-        object.html("<p>Book</p>");
-      }, 1500);
     }
   }).fail(function (response) {
     object.html('<p><i class="fas fa-times" style="color: #fff; font-size: 13px;"></i> Failed</p>');
@@ -3431,8 +4331,8 @@ $(document).on('click','.unBook',function(){
     console.log(response);
     if (response == 'unbooked') {
       object.parent().parent().parent().parent().parent().parent().html(`<div><div class="timetable-button timetable-button-u book" data-id="${thing.dataset.id}"><p>Book</p></div></div>`);
-    } else {
-
+    } else if (response == 'current'){
+      object.parent().parent().parent().parent().parent().parent().html(`<div><div class="timetable-button timetable-button-u book" data-id="${thing.dataset.id}"><p>Cover</p></div></div>`);
     }
   }).fail(function (response) {
 

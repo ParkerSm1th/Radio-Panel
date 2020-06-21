@@ -53,8 +53,8 @@
 
 CUSTOM BELOW
 
-DARK: #0b0b2f
-DARK HOVER: #0d0d38
+DARK: #001125
+DARK HOVER: #03162f
 -------------------------------------------------------------------*/
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,900');
 @import url('https://fonts.googleapis.com/css?family=Exo');
@@ -69,6 +69,11 @@ DARK HOVER: #0d0d38
   font-weight: 300;
   font-size: 3.3rem;
   text-shadow: 0px 0px 10px #000;
+}
+
+.pLogo img {
+  height: 110px;
+  transform: rotate(20deg);
 }
 
 .pLogoTwo {
@@ -13989,7 +13994,7 @@ input:focus {
 /* Sidebar */
 .sidebar {
   min-height: calc(100vh - 63px);
-  background: #0b0b2f;
+  background: #001125;
   font-family: "Poppins", sans-serif;
   padding: 0;
   width: 255px;
@@ -14007,7 +14012,7 @@ input:focus {
       z-index: 999; }
     .sidebar .nav .nav-item .collapse.show,
     .sidebar .nav .nav-item .collapsing {
-      background: #0d0d38; }
+      background: #03162f; }
     .sidebar .nav .nav-item .nav-link {
       align-items: center;
       display: flex;
@@ -14039,7 +14044,7 @@ input:focus {
           vertical-align: middle;
           color: #fff; }
       .sidebar .nav .nav-item .nav-link[aria-expanded="true"] {
-        background: #0d0d38; }
+        background: #03162f; }
         .sidebar .nav .nav-item .nav-link[aria-expanded="true"] i.menu-arrow {
           -moz-transform: rotate(90deg);
           -o-transform: rotate(90deg);
@@ -14069,7 +14074,7 @@ input:focus {
       .sidebar .nav .nav-item.active > .nav-link i {
         color: inherit; }
     .sidebar .nav .nav-item.nav-profile {
-      background: #0d0d38;
+      background: #03162f;
     }
     .sidebar .nav .nav-item.nav-profile .nav-link {
       display: -webkit-flex;
@@ -14099,7 +14104,7 @@ input:focus {
           .sidebar .nav .nav-item.nav-profile .nav-link .user-wrapper .text-wrapper .designation {
             margin-right: 3px; }
     .sidebar .nav:not(.sub-menu) > .nav-item:hover:not(.nav-profile) > .nav-link {
-      background: #0d0d38;
+      background: #03162f;
       color: #fff; }
     .sidebar .nav.sub-menu {
       margin-bottom: 0;
@@ -14125,11 +14130,11 @@ input:focus {
   background: #161a27; }
   .sidebar-dark .sidebar .nav .nav-item .collapse.show,
   .sidebar-dark .sidebar .nav .nav-item .collapsing {
-    background: #0d0d38; }
+    background: #03162f; }
   .sidebar-dark .sidebar .nav .nav-item .nav-link {
     color: #fff; }
     .sidebar-dark .sidebar .nav .nav-item .nav-link[aria-expanded="true"] {
-      background: #0d0d38; }
+      background: #03162f; }
     .sidebar-dark .sidebar .nav .nav-item .nav-link i {
       color: #404852; }
       .sidebar-dark .sidebar .nav .nav-item .nav-link i.menu-arrow:before {
@@ -14151,7 +14156,7 @@ input:focus {
   .sidebar-dark .sidebar .nav .nav-item .sidebar-sticker {
     background: #1f2537; }
   .sidebar-dark .sidebar .nav:not(.sub-menu) > .nav-item:hover:not(.nav-profile) > .nav-link {
-    background: #0d0d38;
+    background: #03162f;
     color: #fff; }
   .sidebar-dark .sidebar .nav.sub-menu .nav-item .nav-link {
     color: #fff; }
@@ -14183,7 +14188,7 @@ input:focus {
 /* Navbar */
 .navbar.default-layout {
   font-family: "Poppins", sans-serif;
-  background: #0b0b2f;
+  background: #001125;
   transition: background 0.25s ease;
   -webkit-transition: background 0.25s ease;
   -moz-transition: background 0.25s ease;

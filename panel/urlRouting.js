@@ -3,12 +3,16 @@ var urlRoute = {
     folderUrl: "",
     previousUrl: "",
     currentUrl: "",
+    currentCode: "Staff.Dashboard",
     previousCode: "",
     folderUrl: function(e) {
         return this.folderUrl = e, this
     },
     setBaseUrl: function(e) {
         return this.baseUrl = e + "/", this
+    },
+    setCurrentCode: function(e) {
+        return this.currentCode = e, this
     },
     setPreviousUrl: function(e) {
         return this.previousUrl = e, this
@@ -34,10 +38,17 @@ var urlRoute = {
         else var r = o[1];
         var l = this.baseUrl + "Pages" + t[0] + "/" + o[0] + ".php?" + r;
         var r = "Pages" + t[0] + "/" + o[0] + ".php";
-        $("#content").addClass("loading"), urlRoute.loadPageContent(l, `${t[0]}.${o[0]}`, r), "function" == typeof destroy && destroy(), window.history.pushState(null, null, this.folderUrl + e)
+        $("#pageTitle").html(`<i class="fas fa-circle-notch fa-spin"></i>`);
+        urlRoute.loadPageContent(l, `${t[0]}.${o[0]}`, r), "function" == typeof destroy && destroy(), window.history.pushState(null, null, this.folderUrl + e)
+    },
+    setPageTitle: function(e) {
+      $("#pageTitle").html(e);
+    },
+    setPageTitleCurrent: function(e) {
+      $("#pageTitle").html(this.currentCode);
     },
     loadPageContent: function(e, o, r) {
-        console.log(`[POWER PANEL] Testing URL ${r}`);
+        console.log(`[KeyFM PANEL] Testing URL ${r}`);
         $.ajax({
             url: 'scripts/testPage.php?page=' + r,
             type: "get",
@@ -48,8 +59,11 @@ var urlRoute = {
                       type: "get",
                       success: function(e) {
                           this.setPreviousCode = o;
-                          console.log(`[POWER PANEL] Loading page ${o}`);
-                          $("#content").removeClass("loading").html(e);
+                          console.log(`[KeyFM PANEL] Loading page ${o}`);
+                          $("#content").html(e);
+                          window.scrollTo(0, 0);
+                          urlRoute.currentCode = o;
+                          document.cookie="currentPage=" + o;
                       },
                       error: function() {
                           urlRoute.pageError();
@@ -65,7 +79,7 @@ var urlRoute = {
         });
     },
     pageError: function() {
-      newError('That page can not be found'), urlRoute.loadPage(this.previousCode)
+      newError('That page can not be found'), urlRoute.loadPage("Staff.Dashboard");
     }
 };
 $("body").on("click", "a", function(e) {
