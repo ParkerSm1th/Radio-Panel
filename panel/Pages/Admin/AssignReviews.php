@@ -14,6 +14,9 @@ include('../../includes/config.php');
     margin: 10px;
     font-size: 14px;
    }
+   .ra {
+     background: #17273e !important;
+   }
  </style>
     <?php
       $stmt = $conn->prepare("SELECT * FROM review_assignments");

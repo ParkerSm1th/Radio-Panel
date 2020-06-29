@@ -23,6 +23,7 @@ if (isset($_GET['welcome'])) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
   <title>KeyFM Staff -> Panel</title>
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-IIED/eyOkM6ihtOiQsX2zizxFBphgnv1zbe1bKA+njdFzkr6cDNy16jfIKWu4FNH" crossorigin="anonymous">
   <link rel="stylesheet" href="../vendors/iconfonts/mdi/css/materialdesignicons.min.css">
@@ -285,7 +286,7 @@ if (isset($_GET['welcome'])) {
     $("#linkDiscord").on("click", function() {
       var params = 'scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no, width=400,height=750,left=100,top=4000';
 
-      let popUp = open('https://discordapp.com/api/oauth2/authorize?client_id=706667108930551899&scope=identify&response_type=code&redirect_uri=http%3A%2F%2Fvps.parkersmith.io%3A3200%2Fdiscord%2Fcallback&state=<?php echo $_SESSION['loggedIn']['id']?>', 'Link Discord', params);
+      let popUp = open('https://discordapp.com/api/oauth2/authorize?client_id=706667108930551899&scope=identify&response_type=code&redirect_uri=https%3A%2F%2Fapi.keyfm.net%2Fdiscord%2Fcallback&state=<?php echo $_SESSION['loggedIn']['id']?>', 'Link Discord', params);
       $("#discordArea").html(`
         <i class="fas fa-circle-notch fa-spin" style="color: #fff; margin-top: 30px; font-size: 35px;"></i>
         `);

@@ -1,5 +1,6 @@
 <?php
 include('../includes/config.php');
+header("Access-Control-Allow-Origin: *");
 $api = $_POST['api'];
 if ($api !== "q1tbDYr9M4rCDM5Nos09Wrg7UlKpSunv9WM3BG9V9N5qeVE") {
   echo "0";

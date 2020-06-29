@@ -8,8 +8,10 @@ include('../../includes/header.php');
 include('../../includes/config.php');
  ?>
 <div class="card">
+  <div class="card-head">
+    <h1>New Page</h1>
+  </div>
   <div class="card-body">
-    <h4 class="card-title">New Page</h4>
     <form class="forms-sample" id='newPage' action="#">
       <div class="form-group" id='errorFieldOut' style='display: none;'>
         <span class="btn btn-danger submit-btn btn-block" id='errorField'></span>

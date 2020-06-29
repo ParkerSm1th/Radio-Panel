@@ -36,7 +36,7 @@ $stmt->bindParam(':reason', $reason);
 $stmt->bindParam(':length', $return);
 $stmt->bindParam(':times', $current);
 $stmt->execute();
-$url = "http://31.220.56.47:3201/api/keyfm/newForm";
+$url = "http://45.82.72.86:3201/api/keyfm/newForm";
 $fields = [
     'api' => "q1tbDYr9M4rCDM5Nos09Wrg7UlKpSunv9WM3BG9V9N5qeVE",
     'username' => $_SESSION['loggedIn']['username'],

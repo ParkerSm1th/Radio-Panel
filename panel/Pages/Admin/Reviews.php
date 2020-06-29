@@ -32,14 +32,7 @@ include('../../includes/config.php');
     </div>
 <script>
 $('#publish').on('click', function() {
-  $.ajax({
-      type: 'POST',
-      url: 'scripts/reviews.php?action=publish'
-  }).done(function(response) {
-      if (response == 'updated') {
-        newSuccess("The reviews have been published and assignments have been cleared!");
-      }
-  });
+  urlRoute.loadPage("Admin.PublishReviews");
 })
 $('#assign').on('click', function() {
   urlRoute.loadPage("Admin.AssignReviews");

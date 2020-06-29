@@ -1,6 +1,6 @@
 <?php
   include('../includes/config.php');
-  $runfile = 'http://31.220.56.47:3200/stats';
+  $runfile = 'http://45.82.72.86:3200/stats';
   //  Initiate curl
   $ch = curl_init();
   // Disable SSL verification

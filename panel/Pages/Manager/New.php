@@ -116,6 +116,11 @@ if ($_GET['custom'] == true) {
         </div>
         <div class="form-check">
           <label class="form-check-label">
+            <input type="checkbox" name='guest' id="guest" class="form-check-input" checked=""> Guest
+          <i class="input-helper"></i></label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
             <input type="checkbox" name='trial' id="trial" class="form-check-input" disabled="" checked=""> Trial
           <i class="input-helper"></i></label>
         </div>

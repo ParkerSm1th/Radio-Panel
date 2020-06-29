@@ -66,7 +66,7 @@ if ($row['permRole'] == 5 || $row['permRole'] == 6) {
        <div class="form-group" id='discordMsgOut' style='display: none;'>
          <p style="user-select: auto;"class="btn btn-success submit-btn btn-block" id='discordMessage'>...</p>
        </div>
-     <img style="height: 55px;border-radius: 100%;margin-bottom: 10px;" src="<?php echo $row['avatarURL']?>" onerror="this.src='../images/default.png'" alt="image">
+     <img style="height: 55px;border-radius: 100%;margin-bottom: 10px;" src="../../profilePictures/<?php echo $row['avatarURL']?>" onerror="this.src='../images/default.png'" alt="image">
      <p class="card-description">Are you sure you want to delete <span class="<?php echo $color ?> userLink" onclick="loadProfile(<?php echo $id ?>)" style="font-size: 15px;"><?php echo $row['username'] ?></span>?</p>
      <div class="form-group">
        <button class="btn btn-success mr-2" id='submit'>Yes</button>

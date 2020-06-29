@@ -85,9 +85,15 @@ if ($_GET['id'] == null) {
         ?>
         <h2><?php
         if ($row['radio'] == '1') {
-          ?>
-          <span class="cTooltip"><i class='dstaff-text fa fa-microphone-alt'></i><b title="Radio DJ"></b></span>
-          <?php
+          if ($row['guest'] == '1') {
+            ?>
+              <span class="cTooltip"><i class='dstaff-text fa fa-microphone-alt'></i><b title="Guest DJ"></b></span>
+            <?php
+          } else {
+            ?>
+              <span class="cTooltip"><i class='dstaff-text fa fa-microphone-alt'></i><b title="Radio DJ"></b></span>
+            <?php
+          }
         }
         if ($row['media'] == '1') {
           ?>

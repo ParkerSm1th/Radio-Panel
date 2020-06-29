@@ -65,13 +65,17 @@ p.form-control {
                 $awayS->execute();
                 $away = $awayS->rowCount();
                 if ($away == 0) {
-                  if ($count < 3) {
+                  $min = 3;
+                  if ($row['guest'] == 1) {
+                    $min = 1;
+                  }
+                  if ($count < $min) {
                     if ($row['discord'] == null) {
                       $discord = "**" . $row['username'] . "**";
                     } else {
                       $discord = "<@" . $row['discord_id'] . ">";
                     }
-                    $difference = 3 - $count;
+                    $difference = $min - $count;
                     if ($difference == 3) {
                       ?>
               :three: <?php echo $discord ?><br>

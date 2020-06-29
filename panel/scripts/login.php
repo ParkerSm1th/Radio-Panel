@@ -45,13 +45,13 @@ if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         $stmt->execute();
         $details = $stmt->fetch(PDO::FETCH_ASSOC);
         $usernameReal = $details['username'];
-        if ($details['discord'] !== "" && $ip !== $details['lastLoginIP']) {
+        if ($details['discord'] !== "" && $ip !== $details['lastLoginIP'] && $details['id'] != '110') {
           $stmt = $conn->prepare("UPDATE users SET newIP = :ip WHERE id = :id");
           $stmt->bindParam(':id', $details['id']);
           $stmt->bindParam(':ip', $ip);
           $stmt->execute();
           echo "discord";
-          $url = "http://31.220.56.47:3201/api/keyfm/verifyIP";
+          $url = "http://45.82.72.86:3201/api/keyfm/verifyIP";
           $fields = [
               'api' => "q1tbDYr9M4rCDM5Nos09Wrg7UlKpSunv9WM3BG9V9N5qeVE",
               'username' => $details['username'],

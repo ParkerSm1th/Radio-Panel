@@ -156,6 +156,11 @@ if ($row['permRole'] == 6 && $_SESSION['loggedIn']['developer'] != 1) {
         </div>
         <div class="form-check">
           <label class="form-check-label">
+            <input type="checkbox" name='guest' id="guest" class="form-check-input" <?php if ($row['guest'] == 1) { ?>checked=""<?php } ?>> Guest
+          <i class="input-helper"></i></label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
             <input type="checkbox" name='trial' id="trial" class="form-check-input" <?php if ($row['trial'] == 1) { ?>checked=""<?php } ?>> Trial
           <i class="input-helper"></i></label>
         </div>

@@ -6,6 +6,28 @@
   $title = "New Review";
   include('../../includes/header.php');
   include('../../includes/config.php');
+  $id = $_GET['id'];
+  $stmt = $conn->prepare("SELECT * FROM post_away WHERE user = :id AND (status = 1 OR status = 0)");
+  $stmt->bindParam(':id', $id);
+  $stmt->execute();
+  $count = $stmt->rowCount();
+  if ($count == 0) {
+    $away = '<i class="fa fa-times"></i>';
+  } else {
+    $away = '<i class="fa fa-check"></i>';
+  }
+  $stmt = $conn->prepare("SELECT * FROM timetable WHERE booked = :id AND booked_type = 0");
+  $stmt->bindParam(':id', $id);
+  $stmt->execute();
+  $booked = $stmt->rowCount();
+  $stmt = $conn->prepare("SELECT * FROM timetable WHERE booked = :id AND booked_type = 1");
+  $stmt->bindParam(':id', $id);
+  $stmt->execute();
+  $covered = $stmt->rowCount();
+  $stmt = $conn->prepare("SELECT * FROM timetable WHERE booked = :id");
+  $stmt->bindParam(':id', $id);
+  $stmt->execute();
+  $total = $stmt->rowCount();
 ?>
 <style>
     .rating i {
@@ -19,37 +41,36 @@
     .rating i:hover ~ i {
       color: #fff900;
     }
+    .bigStat.bg-darker {
+      background: #0d1f33;
+      height: 71px;
+      width: 100%;
+      margin-bottom: 20px;
+      border-radius: 3px;
+    }
+    .bigStat p {
+      color: #fff;
+      padding-top: 1px;
+      /* text-align: center; */
+      padding-left: 10px;
+      margin-bottom: 0px;
+      font-size: 34px;
+    }
+    .bigStat p i {
+      padding-top: 6px;
+      margin-bottom: 12px;
+    }
+    .bigStat h1 {
+      color: #ffffffb3;
+      font-size: 14px;
+      padding: 10px;
+      margin-bottom: 0px;
+      margin-top: -12px;
+    }
 </style>
 <div class="card" style="margin-bottom: 20px;">
   <div class="card-head">
-  <?php
-    $stmt = $conn->prepare("SELECT * FROM users WHERE id = :id");
-    $stmt->bindParam(":id", $_GET['id']);
-    $stmt->execute();
-    $userDetails = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($userDetails['permRole'] == 1) {
-      $color = 'dstaff-text';
-    }
-    if ($userDetails['permRole'] == 2) {
-      $color = 'sstaff-text';
-    }
-    if ($userDetails['permRole'] == 3) {
-      $color = 'manager-text';
-    }
-    if ($userDetails['permRole'] == 4) {
-      $color = 'admin-text';
-    }
-
-    if ($userDetails['permRole'] == 5) {
-      $color = 'executive-text';
-    }
-
-    if ($userDetails['permRole'] == 6) {
-      $color = 'owner-text';
-    }
-    $user = "<span class='" . $color . " userLink' onclick='loadProfile(" . $userDetails['id'] . ")'>" . $userDetails['username'] . "</span>";
-    ?>
-    <h1>New Review for <?php echo $user?></h1>
+    <h1>New Review for <?php echo getUserSpan($_GET['id'])?></h1>
     <div class="card-actions">
       <a href="HDJ.Reviews" class="web-page">
         <button class="profile-close-button btn btn-light mr-2">Back</button>
@@ -61,6 +82,32 @@
   </div>
   <div class="card-body">
     
+    <div class="row">
+      <div class="col-md-3 col-sm-12">
+        <div class="bigStat bg-darker">
+          <p><?php echo $away ?></p>
+          <h1>Posted Away</h1>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-12">
+        <div class="bigStat bg-darker">
+          <p><?php echo $booked ?></p>
+          <h1>Booked Slots</h1>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-12">
+        <div class="bigStat bg-darker">
+          <p><?php echo $covered ?></p>
+          <h1>Covered Slots</h1>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-12">
+        <div class="bigStat bg-darker">
+          <p><?php echo $total ?></p>
+          <h1>Completed Slots</h1>
+        </div>
+      </div>
+    </div>
     
     <form class="forms-sample" id='newReview' action="#">
       <div class="review">

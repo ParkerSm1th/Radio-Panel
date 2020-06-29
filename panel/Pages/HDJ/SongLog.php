@@ -25,7 +25,7 @@ include('../../includes/config.php');
         <tbody>
           <?php
 
-            $stmt = $conn->prepare("SELECT * FROM song_log ORDER BY id DESC LIMIT 100");
+            $stmt = $conn->prepare("SELECT * FROM song_log WHERE dj_name != 'Auto DJ' ORDER BY id DESC LIMIT 100");
             $stmt->execute();
 
             foreach($stmt as $row) {

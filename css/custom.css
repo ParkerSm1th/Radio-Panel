@@ -1604,7 +1604,7 @@ div.token-input-dropdown-mac {
   border-top: none;
   left: -1px;
   right: -1px;
-  background-color: #05182b;
+  background-color: #132133;
   overflow: hidden;
   border: none !important;
   cursor: default;
@@ -1641,19 +1641,19 @@ div.token-input-dropdown-mac ul li {
   list-style-type: none;
   cursor: pointer;
   background: none;
-  background-color: #05182b;
+  background-color: #132133;
   margin: 0;
   padding: 0 0 0 25px;
   color: #fff;
 }
 
 ul.token-input-list-mac {
-  background: #011733;
+  background: #132133;
   margin: 10px;
 }
 
 div.token-input-dropdown-mac ul li.token-input-dropdown-item-mac {
-  background-color: #05182b;
+  background-color: #132133;
 }
 
 li.token-input-highlighted-token-mac span.token-input-delete-token-mac {
@@ -1661,7 +1661,7 @@ li.token-input-highlighted-token-mac span.token-input-delete-token-mac {
 }
 
 div.token-input-dropdown-mac ul li.token-input-dropdown-item-mac.odd {
-  background-color: #05182b;
+  background-color: #132133;
   border-radius: 15px;
   -moz-border-radius: 15px;
   -webkit-border-radius: 15px;

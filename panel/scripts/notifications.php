@@ -81,7 +81,7 @@
  $stmt->execute();
  $count2 = $stmt->rowCount();
 
- $url = "http://31.220.56.47:3200/stats";
+ $url = "http://45.82.72.86:3200/stats";
  $ch = curl_init();
  curl_setopt($ch,CURLOPT_URL, $url);
  curl_setopt($ch,CURLOPT_GET, true);

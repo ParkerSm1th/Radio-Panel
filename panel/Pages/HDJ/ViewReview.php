@@ -9,43 +9,18 @@
   include('../../includes/config.php');
 ?>
 <div class="card" style="margin-bottom: 20px;">
+  <div class="card-head">
+      <h1>Non-Published Review for <?php echo getUserSpan($_GET['id']);?></h4>
+      <div class="card-actions">
+        <a href="HDJ.Reviews" class="web-page">
+          <button class="profile-close-button btn btn-light mr-2">Back</button>
+        </a>
+        <a href="HDJ.EditReview?id=<?php echo $_GET['id']?>" class="web-page">
+          <button class="profile-close-button btn btn-light mr-2">Edit Review</button>
+        </a>
+      </div>
+  </div>
   <div class="card-body">
-    <?php
-    $stmt = $conn->prepare("SELECT * FROM users WHERE id = :id");
-    $stmt->bindParam(":id", $_GET['id']);
-    $stmt->execute();
-    $userDetails = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($userDetails['permRole'] == 1) {
-      $color = 'dstaff-text';
-    }
-    if ($userDetails['permRole'] == 2) {
-      $color = 'sstaff-text';
-    }
-    if ($userDetails['permRole'] == 3) {
-      $color = 'manager-text';
-    }
-    if ($userDetails['permRole'] == 4) {
-      $color = 'admin-text';
-    }
-
-    if ($userDetails['permRole'] == 5) {
-      $color = 'executive-text';
-    }
-
-    if ($userDetails['permRole'] == 6) {
-      $color = 'owner-text';
-    }
-    $user = "<span class='" . $color . " userLink' onclick='loadProfile(" . $userDetails['id'] . ")'>" . $userDetails['username'] . "</span>";
-    ?>
-    <h4 class="card-title">Non-Published Review for <?php echo $user?></h4>
-    <div class="card-actions">
-      <a href="HDJ.Reviews" class="web-page">
-        <button class="profile-close-button btn btn-light mr-2">Back</button>
-      </a>
-      <a href="HDJ.EditReview?id=<?php echo $_GET['id']?>" class="web-page">
-        <button class="profile-close-button btn btn-light mr-2">Edit Review</button>
-      </a>
-    </div>
     <?php
       $stmt = $conn->prepare("SELECT * FROM reviews WHERE user = :id AND published = 0 ORDER BY id DESC LIMIT 1");
       $stmt->bindParam(':id', $_GET['id']);
