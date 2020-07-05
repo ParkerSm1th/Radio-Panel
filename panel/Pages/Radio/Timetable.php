@@ -99,6 +99,10 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -179,7 +183,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -256,6 +260,9 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -326,7 +333,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -403,6 +410,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -476,7 +486,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -553,6 +563,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -623,7 +636,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -710,6 +723,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -780,7 +796,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -857,6 +873,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -927,7 +946,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -1004,6 +1023,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -1077,7 +1099,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -1154,6 +1176,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -1224,7 +1249,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -1311,6 +1336,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -1381,7 +1409,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -1453,10 +1481,14 @@ if ($day < $currentDay) {
                   }
                   $own = false;
                   if ($row2 != null) {
+                    
                     if ($row['booked_type'] == '0') {
                       $booked = $row2['username'];
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
+                    }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
                     }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
@@ -1528,7 +1560,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -1605,6 +1637,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -1678,7 +1713,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -1755,6 +1790,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -1825,7 +1863,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -1912,6 +1950,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -1982,7 +2023,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -2059,6 +2100,9 @@ if ($day < $currentDay) {
 } else {
   $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
 }
+if ($row2['type'] == 1) {
+  $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+}
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -2129,7 +2173,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -2206,6 +2250,9 @@ if ($day < $currentDay) {
 } else {
   $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
 }
+if ($row2['type'] == 1) {
+  $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+}
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -2279,7 +2326,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -2356,6 +2403,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -2426,7 +2476,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -2513,6 +2563,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -2583,7 +2636,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -2660,6 +2713,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -2730,7 +2786,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -2807,6 +2863,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -2880,7 +2939,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -2957,6 +3016,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -3027,7 +3089,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -3114,6 +3176,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -3184,7 +3249,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -3261,6 +3326,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -3331,7 +3399,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -3408,6 +3476,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -3481,7 +3552,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -3558,6 +3629,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -3628,7 +3702,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -3715,6 +3789,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -3785,7 +3862,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -3862,6 +3939,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -3932,7 +4012,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -4009,6 +4089,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -4082,7 +4165,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">
@@ -4159,6 +4242,9 @@ if ($day < $currentDay) {
                     } else {
                       $booked = '<span class="cTooltip"><i class="far fa-life-ring"></i><b title="Covered Slot"></b></span> ' . $row2['username'];
                     }
+                    if ($row2['type'] == 1) {
+                      $booked = '<span class="cTooltip"><i class="fas fa-calendar-star"></i><b title="Perm Show"></b></span> ' . $row2['username'];
+                    }
                     $button = false;
                     if ($row2['id'] == $_SESSION['loggedIn']['id']) {
                       $own = true;
@@ -4229,7 +4315,7 @@ if ($row['timestart'] == $currentHour && $row['day'] == $currentDay) {
                 </div>
                   <?php
                 } else {
-                  if ($_SESSION['loggedIn']['permRole'] >= 3) {
+                  if ($_SESSION['loggedIn']['permRole'] >= 3 && $row2['type'] != 1) {
                     ?>
                     <div>
                     <div class="row timetable-in">

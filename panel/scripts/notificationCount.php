@@ -27,7 +27,7 @@ $count2 = $stmt->rowCount();
 $stat = $conn->prepare("SELECT * FROM song_log ORDER BY id DESC LIMIT 30");
 $stat->execute();
 $current = $stat->fetch(PDO::FETCH_ASSOC);
-$url = "http://45.82.72.86:3200/stats";
+$url = "https://api.keyfm.net/stats";
 $ch = curl_init();
 curl_setopt($ch,CURLOPT_URL, $url);
 curl_setopt($ch,CURLOPT_GET, true);

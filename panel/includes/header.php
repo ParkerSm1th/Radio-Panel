@@ -14,6 +14,27 @@ if (isset($debug)) {
     error_reporting(E_ALL);
   }
 }
+if ($_SESSION['loggedIn']['pending'] == 1) {
+  if (isset($pending)) {
+    if ($pending != 1) {
+      ?>
+      <script>
+        newError('You do not have permission to access that page.');
+        urlRoute.loadPage("Staff.Dashboard");
+      </script>
+      <?php
+      exit();
+    }
+  } else {
+    ?>
+    <script>
+      newError('You do not have permission to access that page.');
+      urlRoute.loadPage("Staff.Dashboard");
+    </script>
+    <?php
+    exit();
+  }
+}
 if (isset($title)) {
   if ($_SESSION['loggedIn']['postedAway'] == 1) {
     if (!isset($allowPost)) {

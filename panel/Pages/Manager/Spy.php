@@ -59,7 +59,7 @@ if ($_SESSION['loggedIn']['permRole'] >= 4) {
  </style>
      <div class="row">
       
-     <div class="col-md-4 col-sm-12">
+     <div class="col-md-6 col-sm-12">
         <div class="application">
           <div class="app-header" style="background: #0584ff;">
             <h1 class="region"><img src="https://keyfm.net/splash/assets/images/favicon.png"></h1>
@@ -78,26 +78,7 @@ if ($_SESSION['loggedIn']['permRole'] >= 4) {
         </div>
       </div>
 
-     <div class="col-md-4 col-sm-12">
-        <div class="application">
-          <div class="app-header" style="background: #3498db;">
-            <h1 class="region"><img src="https://itsaqua.net/logo.png"></h1>
-            <p class="name">Aqua</p>
-            <p class="discord">https://itsaqua.net</p>
-          </div>
-          <div class="app-body">
-            <div class="buttons">
-              <div class="dj"><i class="fas fa-microphone-alt"></i> <span id="aDJ" class="sDJ"><i class="fas fa-circle-notch fa-spin"></i></span></div>
-              <div class="song"><i class="fas fa-music"></i> <span id="aSong" class="sSong"><i class="fas fa-circle-notch fa-spin"></i></span></div>
-            </div>
-            <div class="status">
-              <h1><span id="aL"><i class="fas fa-circle-notch fa-spin"></i></span> listeners</h1>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4 col-sm-12">
+      <div class="col-md-6 col-sm-12">
         <div class="application">
           <div class="app-header" style="background: #983885;">
             <h1 class="region"><img src="https://upbeatradio.net/staff/_assets/_avatarImages/default/default.png?3"></h1>
@@ -116,7 +97,43 @@ if ($_SESSION['loggedIn']['permRole'] >= 4) {
         </div>
       </div>
 
-      
+      <div class="col-md-6 col-sm-12">
+        <div class="application">
+          <div class="app-header" style="background: #bc28ae;">
+            <h1 class="region"><img src="https://staff.keyfm.net/images/raveLogo.png"></h1>
+            <p class="name">Rave</p>
+            <p class="discord">https://raveradio.net</p>
+          </div>
+          <div class="app-body">
+            <div class="buttons">
+              <div class="dj"><i class="fas fa-microphone-alt"></i> <span id="rDJ" class="sDJ"><i class="fas fa-circle-notch fa-spin"></i></span></div>
+              <div class="song"><i class="fas fa-music"></i> <span id="rSong" class="sSong"><i class="fas fa-circle-notch fa-spin"></i></span></div>
+            </div>
+            <div class="status">
+              <h1><span id="rL"><i class="fas fa-circle-notch fa-spin"></i></span> listeners</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-sm-12">
+        <div class="application">
+          <div class="app-header" style="background: #3498db;">
+            <h1 class="region"><img src="https://itsaqua.net/logo.png"></h1>
+            <p class="name">Aqua</p>
+            <p class="discord">https://itsaqua.net</p>
+          </div>
+          <div class="app-body">
+            <div class="buttons">
+              <div class="dj"><i class="fas fa-microphone-alt"></i> <span id="aDJ" class="sDJ"><i class="fas fa-circle-notch fa-spin"></i></span></div>
+              <div class="song"><i class="fas fa-music"></i> <span id="aSong" class="sSong"><i class="fas fa-circle-notch fa-spin"></i></span></div>
+            </div>
+            <div class="status">
+              <h1><span id="aL"><i class="fas fa-circle-notch fa-spin"></i></span> listeners</h1>
+            </div>
+          </div>
+        </div>
+      </div>
 
      </div>
 
@@ -166,11 +183,31 @@ if ($_SESSION['loggedIn']['permRole'] >= 4) {
         $("#kL").html(data.data.listeners);
         $("#kDJ").html(data.data.dj);
         $("#kSong").html(data.data.song.name);
+      })
+      .catch(function(err) {
+        $("#kL").html('<i class="fal fa-exclamation-circle"></i>');
+        $("#kDJ").html('<i class="fal fa-exclamation-circle"></i>');
+        $("#kSong").html('<i class="fal fa-exclamation-circle"></i>');
       });
       $.get("https://api.livida.net/api/radio/aqua", function(data, status) {
         $("#aL").html(data.data.listeners);
         $("#aDJ").html(data.data.dj);
         $("#aSong").html(data.data.song.name);
+      })
+      .catch(function(err) {
+        $("#aL").html('<i class="fal fa-exclamation-circle"></i>');
+        $("#aDJ").html('<i class="fal fa-exclamation-circle"></i>');
+        $("#aSong").html('<i class="fal fa-exclamation-circle"></i>');
+      });
+      $.get("https://api.livida.net/api/radio/rave", function(data, status) {
+        $("#rL").html(data.data.listeners);
+        $("#rDJ").html(data.data.dj);
+        $("#rSong").html(data.data.song.name);
+      })
+      .catch(function(err) {
+        $("#rL").html('<i class="fal fa-exclamation-circle"></i>');
+        $("#rDJ").html('<i class="fal fa-exclamation-circle"></i>');
+        $("#rSong").html('<i class="fal fa-exclamation-circle"></i>');
       });
       $.get("http://stats.upbeat.pw/", function(data, status) {
         var xml = xmlToJson(data);

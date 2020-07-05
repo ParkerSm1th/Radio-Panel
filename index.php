@@ -21,6 +21,17 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/login.css">
   <link rel="shortcut icon" href="images/default.png" />
+  <style>
+    .btn {
+      transition: all 300ms ease-in-out;
+    }
+
+    .btn-danger {
+        color: #fff;
+        background-color: #b52c2b !important;
+        border-color: #b52c2b !important;
+    }
+  </style>
 </head>
 
 <body style="background: #0c1b2d !important;">
@@ -138,6 +149,18 @@
     return string.charAt(0).toUpperCase() + string.slice(1); 
   }
 
+  var errorChange;
+  function showError(message) {
+    clearTimeout(errorChange);
+    errorChange = null;
+    $("#submit").addClass('btn-danger');
+    $("#submit").html(message);
+    errorChange = setTimeout(function() {
+      $("#submit").removeClass('btn-danger');
+      $("#submit").html("Login");
+    }, 4000)
+  }
+
   var form = $('#loginForm');
   $(form).submit(function(event) {
       var error = false;
@@ -150,25 +173,28 @@
       if (username.val() == null || username.val() == "") {
         $('#usernameIcon').removeClass('fa-check-circle');
         $('#usernameIcon').addClass('fa-times-circle');
+        $('#usernameIcon').css("color", "#ca4241");
         error = true;
         errorMessage = 'Please fill in all fields';
       } else {
         $('#usernameIcon').addClass('fa-check-circle');
         $('#usernameIcon').removeClass('fa-times-circle');
+        $("#usernameIcon").css("color", "#078e4a");
       }
       if (password.val() == null || password.val() == "") {
         $('#passwordIcon').removeClass('fa-check-circle');
         $('#passwordIcon').addClass('fa-times-circle');
+        $('#passwordIcon').css("color", "#ca4241");
         error = true;
         errorMessage = 'Please fill in all fields';
       } else {
         $('#passwordIcon').addClass('fa-check-circle');
         $('#passwordIcon').removeClass('fa-times-circle');
+        $('#passwordIcon').css("color", "#078e4a");
       }
 
       if (error) {
-        $('#errorFieldOut').fadeIn();
-        $('#errorField').html(errorMessage);
+        showError(errorMessage);
         return true;
       }
       $('#submit').html('<i class="fas fa-circle-notch fa-spin" style="color: #fff;"></i>');
@@ -227,21 +253,12 @@
             });
           }, 1000)
         } else if (response == 'error') {
-          $('#errorField').addClass('btn-danger');
-          $('#errorField').removeClass('btn-success');
-          $('#errorFieldOut').fadeIn();
-          $('#submit').html('Login');
-          $('#errorField').html('Invalid Login Details..');
+          showError("Invalid Login Details..");
         } else if (response == 'suspend') {
-          $('#errorField').addClass('btn-danger');
-          $('#errorField').removeClass('btn-success');
-          $('#errorFieldOut').fadeIn();
-          $('#submit').html('Login');
-          $('#errorField').html('Your account is pending..');
+          showError("Your account is suspended");
         }
       }).fail(function (response) {
-          $('#errorFieldOut').fadeIn();
-          $('#errorField').html('Unknown error occured.');
+        showError("Unknown error occured");
       });
     });
   </script>

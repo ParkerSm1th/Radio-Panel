@@ -3,6 +3,7 @@
   $media = 0;
   $radio = 0;
   $dev = 0;
+  $pending = 1;
   $title = "Profile";
   include('../../includes/header.php');
   include('../../includes/config.php');

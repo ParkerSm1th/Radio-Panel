@@ -26,10 +26,6 @@ if (false) {
   </div>
   <?php
 } else {
-  $stmt = $conn->prepare("UPDATE users SET viewed_info = 1 WHERE id = :id");
-  $stmt->bindParam(':id', $_SESSION['loggedIn']['id']);
-  $stmt->execute();
-
   if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
     $ip = $_SERVER['HTTP_CLIENT_IP'];
   } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {

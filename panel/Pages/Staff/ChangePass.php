@@ -3,6 +3,7 @@
   $media = 0;
   $radio = 0;
   $dev = 0;
+  $pending = 1;
   $allowPost = true;
   $title = "Change Password";
   include('../../includes/header.php');

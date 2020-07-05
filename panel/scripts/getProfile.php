@@ -69,9 +69,13 @@ if ($_GET['id'] == null) {
       </div>
       <div class="name">
         <?php
-          if ($row['inactive'] == "true") {
+          if ($row['pending'] == "1") {
             ?>
-              <h1>Pending - <?php echo $row['username'] ?></h1>
+              <h1>Pending - <?php echo $row['username'] ?> <span style="font-size: 12px;"><?php
+                if ($_SESSION['loggedIn']['developer'] == 1) {
+                  echo "(" . $row['id'] . ")";
+                }
+              ?></span></h1>
             <?php
           } else {
             ?>
@@ -135,9 +139,14 @@ if ($_GET['id'] == null) {
           <span class="cTooltip"><i class='owner-text fas fa-money-check'></i><b title="Owner"></b></span>
           <?php
         }
+        if ($row['pending'] == '1') {
+          ?>
+          <span class="cTooltip"><i class='fas fa-circle-notch'></i><b title="Pending"></b></span>
+          <?php
+        }
         if ($row['inactive'] == 'true') {
           ?>
-          <span class="cTooltip"><i class='fas fa-circle-notch'></i><b title="Pending/Suspended"></b></span>
+          <span class="cTooltip"><i class='fas fa-cross'></i><b title="Suspended"></b></span>
           <?php
         }
         if ($row['trial'] == '1') {

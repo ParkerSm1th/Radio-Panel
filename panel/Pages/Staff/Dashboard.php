@@ -3,6 +3,7 @@ $perm = 1;
 $media = 0;
 $radio = 0;
 $dev = 0;
+$pending = 1;
 $title = "Dashboard";
 include('../../includes/header.php');
 include('../../includes/config.php');
@@ -359,6 +360,91 @@ foreach($stmt as $row) {
             </div>
           </div>
         </div>
+        <?php if ($_SESSION['loggedIn']['permRole'] > 1) {
+          ?>
+            <div class="col-md-6 col-sm-12">
+          <div class="card p-10-10" style="background: #9a1790 !important">
+            <div class="row">
+              <div class="col-md-3">
+                <a href="HDJ.AddPoint" class="web-page">
+                  <div class=" quickLink">
+                    <i class="fal fa-clipboard-list"></i>
+                    <h1>+ Points</h1>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-3 b-l">
+                <a href="HDJ.SongLog" class="web-page">
+                  <div class="web-page quickLink">
+                    <i class="fas fa-clipboard-check"></i>
+                    <h1>Song Log</h1>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-3 b-l">
+                <a href="HDJ.Slacking" class="web-page">
+                  <div class="quickLink">
+                    <i class="fal fa-gavel"></i>
+                    <h1>Slacking</h1>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-3 b-l">
+                <a href="HDJ.Reviews" class="web-page">
+                  <div class="quickLink">
+                    <i class="fal fa-pen"></i>
+                    <h1>Reviews</h1>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+          <?php
+        }?>
+
+        <?php if ($_SESSION['loggedIn']['permRole'] > 2) {
+          ?>
+            <div class="col-md-6 col-sm-12">
+          <div class="card p-10-10" style="background: #006729 !important">
+            <div class="row">
+              <div class="col-md-3">
+                <a href="Manager.Applications" class="web-page">
+                  <div class=" quickLink">
+                    <i class="fal fa-id-badge"></i>
+                    <h1>Apps</h1>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-3 b-l">
+                <a href="Manager.Staff" class="web-page">
+                  <div class="web-page quickLink">
+                    <i class="fas fa-users"></i>
+                    <h1>Staff</h1>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-3 b-l">
+                <a href="Manager.Spy" class="web-page">
+                  <div class="quickLink">
+                    <i class="fal fa-eye"></i>
+                    <h1>Spy</h1>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-3 b-l">
+                <a href="Manager.Short" class="web-page">
+                  <div class="quickLink">
+                    <i class="fal fa-link"></i>
+                    <h1>Shortener</h1>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+          <?php
+        }?>
       </div>
   </div>
   <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
@@ -389,7 +475,7 @@ foreach($stmt as $row) {
 clearInterval(pageInt); 
 pageInt = null;
 chart = null;
-var pageInt = setInterval(updateStats, 10000);
+var pageInt = setInterval(updateStats, 20000);
 setTimeout(updateStats, 500);
 function updateStats(url) {
   return new Promise((resolve, reject) => {
@@ -542,18 +628,18 @@ $.ajax({
               label: 'Listeners',
               data: data,
               fill: true,
-              backgroundColor: '#2f3d99',
-              borderColor: '#2f3d99',
+              backgroundColor: '#00a6c1',
+              borderColor: '#00a6c1',
               borderWidth: 2,
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
               borderJoinStyle: 'miter',
-              pointBorderColor: '#2f3d99',
+              pointBorderColor: '#00a6c1',
               pointBackgroundColor: '#fff',
               pointBorderWidth: 2,
               pointHoverRadius: 4,
-              pointHoverBackgroundColor: '#2f3d99',
+              pointHoverBackgroundColor: '#00a6c1',
               pointHoverBorderColor: '#fff',
               pointHoverBorderWidth: 2,
               pointRadius: [0,4,4,4,4,4,4,4,0],

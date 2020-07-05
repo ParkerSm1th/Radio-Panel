@@ -5,7 +5,6 @@ include('../includes/notifications.php');
 $username = filter_input(INPUT_POST, 'username', FILTER_UNSAFE_RAW);
 $username = strtoupper($username);
 $password = filter_input(INPUT_POST, 'password', FILTER_UNSAFE_RAW);
-
 // Check if username/email exists in the database
 if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
   $ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -45,13 +44,13 @@ if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         $stmt->execute();
         $details = $stmt->fetch(PDO::FETCH_ASSOC);
         $usernameReal = $details['username'];
-        if ($details['discord'] !== "" && $ip !== $details['lastLoginIP'] && $details['id'] != '110') {
+        if ($details['discord'] !== "" && $ip !== $details['lastLoginIP'] && $details['id'] !== 110) {
           $stmt = $conn->prepare("UPDATE users SET newIP = :ip WHERE id = :id");
           $stmt->bindParam(':id', $details['id']);
           $stmt->bindParam(':ip', $ip);
           $stmt->execute();
           echo "discord";
-          $url = "http://45.82.72.86:3201/api/keyfm/verifyIP";
+          $url = "https://bot.keyfm.net/api/keyfm/verifyIP";
           $fields = [
               'api' => "q1tbDYr9M4rCDM5Nos09Wrg7UlKpSunv9WM3BG9V9N5qeVE",
               'username' => $details['username'],
@@ -86,7 +85,8 @@ if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             "trial" => $details['trial'],
             "displayRole" => $details['displayRole'],
             "discord" => $details['discord'],
-            "discordID" => $details['discord_id']
+            "discordID" => $details['discord_id'],
+            "pending" => $details['pending']
           ];
           $_SESSION['loggedIn'] = $loggedIn;
           if ($details['radio'] == 1) {
@@ -129,10 +129,11 @@ if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
           $stmt = $conn->prepare("DELETE FROM sessions WHERE user = :user");
           $stmt->bindParam(':user', $userD);
           $stmt->execute();
-
-          $stmt = $conn->prepare("INSERT INTO sessions (user, session, times) VALUES (:user, :session, CURRENT_TIMESTAMP)");
+          $page = '/Staff.Dashboard';
+          $stmt = $conn->prepare("INSERT INTO sessions (user, session, page, times) VALUES (:user, :session, :page, CURRENT_TIMESTAMP)");
           $stmt->bindParam(':user', $userD);
           $stmt->bindParam(':session', $sessionID);
+          $stmt->bindParam(':page', $page);
           $stmt->execute();
           $_SESSION['logout'] = false;
           echo "good";

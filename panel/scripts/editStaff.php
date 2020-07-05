@@ -31,9 +31,9 @@ if ($_POST['guest'] != null) {
   $guest = 0;
 }
 if ($_POST['pending'] != null) {
-  $pending = 'true';
+  $pending = 1;
 } else {
-  $pending = 'false';
+  $pending = 0;
 }
 if ($_POST['region'] != "EU" && $_POST['region'] != "NA" && $_POST['region'] != "Global" && $_POST['region'] != "OC") {
   echo "error";
@@ -71,7 +71,7 @@ if ($_POST['password'] != null) {
   $update = false;
 }
 if ($update) {
-  $stmt = $conn->prepare("UPDATE users SET username = :username, pass = :pass, permRole = :prole, radio = :radio, media = :media, inactive = :pending, region = :region, trial = :trial, djSays = :djSays, guest = :guest WHERE id = :id");
+  $stmt = $conn->prepare("UPDATE users SET username = :username, pass = :pass, permRole = :prole, radio = :radio, media = :media, pending = :pending, region = :region, trial = :trial, djSays = :djSays, guest = :guest WHERE id = :id");
   $stmt->bindParam(':id', $_GET['id']);
   $stmt->bindParam(':username', $_POST['username']);
   $stmt->bindParam(':pass', $pass);
@@ -89,7 +89,7 @@ if ($update) {
   $stmt->execute();
   echo "updated";
 } else {
-  $stmt = $conn->prepare("UPDATE users SET username = :username, permRole = :prole, radio = :radio, media = :media, inactive = :pending, region = :region, trial = :trial, djSays = :djSays, guest = :guest WHERE id = :id");
+  $stmt = $conn->prepare("UPDATE users SET username = :username, permRole = :prole, radio = :radio, media = :media, pending = :pending, region = :region, trial = :trial, djSays = :djSays, guest = :guest WHERE id = :id");
   $stmt->bindParam(':id', $_GET['id']);
   $stmt->bindParam(':username', $_POST['username']);
   $stmt->bindParam(':prole', $_POST['prole']);

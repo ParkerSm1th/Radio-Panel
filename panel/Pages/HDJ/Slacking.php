@@ -7,7 +7,7 @@ $title = "Slacking DJs";
 include('../../includes/header.php');
 include('../../includes/config.php');
 $admin = false;
-if ($_SESSION['loggedIn']['permRole'] >= 4) {
+if ($_SESSION['loggedIn']['permRole'] >= 3) {
   $admin = true;
 }
  ?>
@@ -24,9 +24,12 @@ if ($_SESSION['loggedIn']['permRole'] >= 4) {
             <th>
               Warned
             </th>
+            <?php if ($admin) {?>
             <th>
               Actions
             </th>
+            <?php
+          }?>
           </tr>
         </thead>
         <tbody>
@@ -71,9 +74,12 @@ if ($_SESSION['loggedIn']['permRole'] >= 4) {
                         <td id="warned-<?php echo $row['id']?>">
                           <?php echo $warned ?>
                         </td>
+                        <?php if ($admin) {?>
                         <td>
                           <button data-id="<?php echo $row['id']?>" class="warnUser profile-close-button btn btn-danger mr-2">Warn</button>
                         </td>
+                        <?php
+                        }?>
                       </tr>
                     <?php
                   }

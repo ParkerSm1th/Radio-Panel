@@ -4,6 +4,9 @@ if ($_SESSION['loggedIn'] == null) {
   header("Location: ../../index.php");
   exit();
 }
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 include('../includes/config.php');
 $id = $_SESSION['loggedIn']['id'];
 $currentAvatar = $_SESSION['loggedIn']['avatarURL'];
@@ -27,7 +30,7 @@ if(isset($_POST["submit"])) {
 }
 
 
-if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
   echo "type";
   $uploadOk = 0;
   exit();
@@ -36,8 +39,10 @@ if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg
 
 if (move_uploaded_file($_FILES["profilePic"]["tmp_name"], $target_file)) {
     if ($currentAvatar !== null) {
-      if (file_exists($target_dir . $currentAvatar)) {
-        unlink($target_dir . $currentAvatar);
+      if (strpos($currentAvatar, 'default/') == false) {
+        if (file_exists($target_dir . $currentAvatar)) {
+          unlink($target_dir . $currentAvatar);
+        }
       }
     }
     $stmt = $conn->prepare("UPDATE users SET avatarURL = :url WHERE id = :id");

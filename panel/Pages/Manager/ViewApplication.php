@@ -23,19 +23,19 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         <p style="user-select: auto;"class="btn btn-success submit-btn btn-block" id='discordMessage'>...</p>
       </div>
       <div class="row">
-        <div class="col-4">
+        <div class="col-md-4 col-sm-12">
           <div class="form-group">
             <label for="username">Age</label>
             <span class="form-control"><?php echo $row['age'] ?></span>
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-md-4 col-sm-12">
           <div class="form-group">
             <label for="username">Discord</label>
             <span class="form-control"><?php echo $row['discord'] ?></span>
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-md-4 col-sm-12">
           <div class="form-group">
             <label for="username">Region</label>
             <span class="form-control"><?php echo $row['region'] ?></span>
@@ -44,7 +44,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
       </div>
 
       <div class="row">
-        <div class="col-4">
+        <div class="col-md-4 col-sm-12">
           <?php
           if ($row['role'] == 0) {
             $role = "<i class='fa fa-microphone-alt'></i> Radio DJ";
@@ -60,7 +60,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             <span class="form-control"><?php echo $role ?></span>
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-md-4 col-sm-12">
           <?php
           if ($row['mic'] == 0) {
             $microphone = "<i class='fas fa-times'></i>";
@@ -73,7 +73,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             <span class="form-control"><?php echo $microphone ?></span>
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-md-4 col-sm-12">
           <?php
           if ($row['work'] == 0) {
             $job = "<i class='fas fa-times'></i>";

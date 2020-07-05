@@ -3,6 +3,7 @@ $perm = 1;
 $media = 0;
 $radio = 0;
 $dev = 0;
+$pending = 1;
 $title = "Staff Contact List";
 include('../../includes/header.php');
 include('../../includes/config.php');
@@ -170,7 +171,7 @@ $count = $stmt->rowCount();
     <!-- Manager -->
 
     <?php
-    if ($_SESSION['loggedIn']['permRole'] >= 3) {
+    if (true) {
      ?>
 
     <div class="card usersCard m-b-10">
@@ -255,7 +256,7 @@ $count = $stmt->rowCount();
     <!-- Administrator -->
 
     <?php
-    if ($_SESSION['loggedIn']['permRole'] >= 5) {
+    if (true) {
      ?>
 
     <div class="card usersCard m-b-10">
@@ -340,7 +341,7 @@ $count = $stmt->rowCount();
      <!-- Executive -->
 
      <?php
-     if ($_SESSION['loggedIn']['permRole'] >= 6) {
+     if (true) {
       ?>
 
      <div class="card usersCard m-b-10">
@@ -419,7 +420,7 @@ $count = $stmt->rowCount();
     <!-- Ownership -->
 
     <?php
-    if ($_SESSION['loggedIn']['developer'] == 1) {
+    if (true) {
      ?>
 
     <div class="card usersCard m-b-10">

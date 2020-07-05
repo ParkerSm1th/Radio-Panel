@@ -1,6 +1,6 @@
 <?php
   include('../includes/config.php');
-  $runfile = 'http://45.82.72.86:3200/stats';
+  $runfile = 'https://api.keyfm.net/stats';
   //  Initiate curl
   $ch = curl_init();
   // Disable SSL verification

@@ -1810,7 +1810,7 @@ div.token-input-dropdown-mac ul li.token-input-selected-dropdown-item-mac.odd sp
 .disc {
   position: absolute;
   width: 190px;
-  padding-top: 4px;
+  padding: 4px 10px;
   height: 30px;
   background: #ffffff24;
   border-radius: 4px;
@@ -1866,6 +1866,14 @@ div.token-input-dropdown-mac ul li.token-input-selected-dropdown-item-mac.odd sp
     float: unset !important;
     margin-top: auto;
     margin-bottom: 20px;
+  }
+  .navbar.default-layout .navbar-menu-wrapper {
+    width: 165px !important;
+    background: transparent !important;
+    border-bottom: none !important;
+  }
+  .navbar.default-layout .navbar-brand-wrapper .brand-logo-mini {
+    display: none !important;
   }
 }
 

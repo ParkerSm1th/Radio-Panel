@@ -59,6 +59,7 @@ $(form).submit(function(event) {
         url: 'scripts/newShort.php',
         data: formData
     }).done(function(response) {
+      console.log(response);
       if (response == 'added') {
         $('#errorFieldOut').fadeIn();
         $('#errorField').removeClass('btn-danger');

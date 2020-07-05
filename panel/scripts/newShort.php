@@ -15,11 +15,10 @@ $stmt = $conn->prepare("SELECT * FROM redirect WHERE slug = :slug");
 $stmt->bindParam(":slug", $short);
 $stmt->execute();
 $count = $stmt->rowCount();
-if ($count !== 0) {
+if ($count != 0) {
   echo "dupe";
   exit();
 }
-date_default_timezone_set('UTC');
 $date = date('jS \of F Y');
 $stmt = $conn->prepare("INSERT INTO redirect (url, slug, date) VALUES (:url, :slug, :date)");
 $stmt->bindParam(':url', $url);

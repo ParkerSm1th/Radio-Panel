@@ -22,7 +22,7 @@
   $stmt->bindParam(':hour', $hour);
   $stmt->execute();
   $count = $stmt->rowCount();
-  $url = "http://31.220.56.47:3200/stats";
+  $url = "https://api.keyfm.net/stats";
   $ch = curl_init();
   curl_setopt($ch,CURLOPT_URL, $url);
   curl_setopt($ch,CURLOPT_GET, true);

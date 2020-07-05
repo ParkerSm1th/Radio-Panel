@@ -12,26 +12,43 @@ include('../includes/config.php');
 $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
 $username = $_POST['username'];
 $firstCharacter = $username[0];
-$avatar = strtoupper($firstCharacter) . 'default.png';
+$avatar = 'default/' . strtoupper($firstCharacter) . 'default.png';
 date_default_timezone_set('UTC');
 $date = date('jS \of F Y');
-if ($_POST['radio'] != null) {
-  $radio = 1;
+if (isset($_POST['radio'])) {
+  if ($_POST['radio'] != null) {
+    $radio = 1;
+  } else {
+    $radio = 0;
+  }
 } else {
   $radio = 0;
 }
-if ($_POST['media'] != null) {
-  $media = 1;
+if (isset($_POST['media'])) {
+  if ($_POST['media'] != null) {
+    $media = 1;
+  } else {
+    $media = 0;
+  }
 } else {
   $media = 0;
 }
-if ($_POST['pending'] != null) {
-  $pending = 'true';
+
+if (isset($_POST['pending'])) {
+  if ($_POST['pending'] != null) {
+    $pending = 1;
+  } else {
+    $pending = 0;
+  }
 } else {
-  $pending = 'false';
+  $pending = 0;
 }
-if ($_POST['guest'] != null) {
-  $guest = 1;
+if (isset($_POST['guest'])) {
+  if ($_POST['guest'] != null) {
+    $guest = 1;
+  } else {
+    $guest = 0;
+  }
 } else {
   $guest = 0;
 }
@@ -40,14 +57,14 @@ if ($_POST['region'] != "EU" && $_POST['region'] != "NA" && $_POST['region'] != 
   exit();
 }
 $disabled = "DISABLED";
-$stmt = $conn->prepare("INSERT INTO users (username, pass, avatarURL, permRole, displayRole, radio, media, developer, inactive, hired, region, trial, guest) VALUES (:username, :pass, :avatarURL, '1', :displayRole, :radio, :media, '0', :inactive, :hired, :region, '1', :guest)");
+$stmt = $conn->prepare("INSERT INTO users (username, pass, avatarURL, permRole, displayRole, radio, media, developer, pending, inactive, hired, region, trial, guest) VALUES (:username, :pass, :avatarURL, '1', :displayRole, :radio, :media, '0', :pending, 'false', :hired, :region, '1', :guest)");
 $stmt->bindParam(':username', $_POST['username']);
 $stmt->bindParam(':pass', $pass);
 $stmt->bindParam(':avatarURL', $avatar);
 $stmt->bindParam(':displayRole', $disabled);
 $stmt->bindParam(':radio', $radio);
 $stmt->bindParam(':media', $media);
-$stmt->bindParam(':inactive', $pending);
+$stmt->bindParam(':pending', $pending);
 $stmt->bindParam(':hired', $date);
 $stmt->bindParam(':guest', $guest);
 $stmt->bindParam(':region', $_POST['region']);

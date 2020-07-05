@@ -3,6 +3,7 @@
   $media = 1;
   $radio = 0;
   $dev = 0;
+  $pending = 1;
   $title = "Rules";
   include('../../includes/header.php');
   include('../../includes/config.php');

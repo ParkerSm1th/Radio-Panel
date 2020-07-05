@@ -151,7 +151,7 @@ if ($row['permRole'] == 6 && $_SESSION['loggedIn']['developer'] != 1) {
       <div class="form-group">
         <div class="form-check">
           <label class="form-check-label">
-            <input type="checkbox" name='pending' id="pending" class="form-check-input" <?php if ($row['inactive'] == 'true') { ?>checked=""<?php } ?>> Pending
+            <input type="checkbox" name='pending' id="pending" class="form-check-input" <?php if ($row['pending'] == '1') { ?>checked=""<?php } ?>> Pending
           <i class="input-helper"></i></label>
         </div>
         <div class="form-check">

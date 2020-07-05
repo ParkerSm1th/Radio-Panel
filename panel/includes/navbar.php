@@ -60,7 +60,8 @@ $loggedIn = [
   "displayRole" => $details['displayRole'],
   "discord" => $details['discord'],
   "discordID" => $details['discord_id'],
-  "postedAway" => $away
+  "postedAway" => $away,
+  "pending" => $details['pending']
 ];
 $_SESSION['loggedIn'] = $loggedIn;
 ?>
@@ -105,21 +106,28 @@ $_SESSION['loggedIn'] = $loggedIn;
               <ul class="nav flex-column sub-menu">
               <?php
               $dev = $_SESSION['loggedIn']['developer'];
-              $stmt = $conn->prepare("SELECT * FROM panel_pages WHERE nav_rank = :id AND dev <= :dev ORDER BY position");
+              $stmt = $conn->prepare("SELECT * FROM panel_pages WHERE nav_rank = :id AND dev <= :dev AND pending >= :pending ORDER BY position");
               $stmt->bindParam(":id", $row['id']);
               $stmt->bindParam(":dev", $dev);
+              $stmt->bindParam(":pending", $_SESSION['loggedIn']['pending']);
               $stmt->execute();
               foreach($stmt as $row) {
-                if ($row['dev'] == 0) {
+                if ($row['dev'] == 1) {
                 ?>
                   <li class="nav-item">
-                    <a class="nav-link web-page" href="<?php echo $row['url']?>">&#187; <?php echo $row['name']?></a>
+                    <a class="nav-link web-page" href="<?php echo $row['url']?>">&#187; <?php echo $row['name']?> <i style="margin-left: 3px;" class="fal fa-file-code"></i></a>
                   </li>
                 <?php
+                } else if ($row['redirect'] == 1) {
+                  ?>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="<?php echo $row['url']?>">&#187; <?php echo $row['name']?> <i style="margin-left: 3px;" class="fas fa-external-link"></i></a>
+                  </li>
+                  <?php
                 } else {
                   ?>
                   <li class="nav-item">
-                    <a class="nav-link web-page" href="<?php echo $row['url']?>">&#187; <?php echo $row['name']?> <i style="margin-left: 3px;" class="fal fa-file-code"></i></a>
+                    <a class="nav-link web-page" href="<?php echo $row['url']?>">&#187; <?php echo $row['name']?></a>
                   </li>
                   <?php
                 }

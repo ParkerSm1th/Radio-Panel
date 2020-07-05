@@ -3,6 +3,7 @@
   $media = 0;
   $radio = 1;
   $dev = 0;
+  $pending = 1;
   $title = "Radio Rules";
   include('../../includes/header.php');
   include('../../includes/config.php');

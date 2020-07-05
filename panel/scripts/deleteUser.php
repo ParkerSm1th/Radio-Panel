@@ -20,6 +20,10 @@ $stmt = $conn->prepare("DELETE FROM users WHERE id = :id");
 $stmt->bindParam(':id', $id);
 $stmt->execute();
 
+$stmt = $conn->prepare("DELETE FROM timetable WHERE booked = :id");
+$stmt->bindParam(':id', $id);
+$stmt->execute();
+
 if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
   $ip = $_SERVER['HTTP_CLIENT_IP'];
 } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
