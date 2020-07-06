@@ -11,6 +11,11 @@ if ($_SESSION['loggedIn']['permRole'] >= 4) {
   $admin = true;
 }
  ?>
+    <div class="card-actions">
+      <a href="Admin.NewShow" class="web-page">
+        <button class="profile-close-button btn btn-light mr-2">New Show</button>
+      </a>
+    </div>
      <div class="row">
        <?php
        $stmt = $conn->prepare("SELECT * FROM perm_shows ORDER BY id DESC");
@@ -46,20 +51,35 @@ if ($_SESSION['loggedIn']['permRole'] >= 4) {
                 $day = "Sunday";
                 break;
             }
+            $hosts = '';
+            $hostSize = 0;
+            $hostArr=explode(",", $row['hosts']); 
+            foreach($hostArr as $var) {
+              $hostSize += 1;
+              if ($hosts != '') {
+                $hosts = $hosts . ', ' . returnUserSpan($var);
+              } else {
+                $hosts = returnUserSpan($var);
+              }
+            }
+            if ($hostSize == 2) {
+              $hosts = str_replace(", ", " & ", $hosts);
+            }
+            
           ?>
           <div class="col-md-4 col-sm-12">
             <div class="application">
-              <div class="app-header bg-na">
+              <div class="app-header" style="background: #08b39d !important">
                 <h1 class="region"></h1>
                 <p class="name"><?php echo $row['name']?></p>
                 <p class="discord"><?php echo $day?> @ <?php echo $timeDetails['timestart']?>:00</p>
               </div>
               <div class="app-body">
                 <div class="buttons">
-                  <button data-id="<?php echo $row['id'] ?>" class="viewButton btn btn-info">View / Manage</button>
+                  <button data-id="<?php echo $row['id'] ?>" class="viewButton btn btn-info" style="background: #08b39d !important; border-color: #08b39d !important;">Manage</button>
                 </div>
                 <div class="status">
-                  <h1></h1>
+                  <h1><?php echo $hosts?></h1>
                 </div>
               </div>
             </div>
@@ -77,7 +97,7 @@ if ($_SESSION['loggedIn']['permRole'] >= 4) {
 
  <script>
  $(".viewButton").on("click", function () {
-   urlRoute.loadPage("Manager.ViewApplication?id=" + $(this).attr('data-id'));
+   urlRoute.loadPage("Admin.EditPerm?id=" + $(this).attr('data-id'));
  });
  $(".reopenButton").on("click", function() {
    $.ajax({

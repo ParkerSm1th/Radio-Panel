@@ -192,6 +192,42 @@ function getUserSpan($id) {
   $span = "<span class='" . $color . " userLink' onclick='loadProfile(" . $userDetails['id'] . ")'>" . $userDetails['username'] . "</span>";
   echo $span;
 }
+
+function returnUserSpan($id) {
+  $db_host = "localhost";
+  $db_user = "keyfm";
+  $db_pass = "NxsGOH1I6Vm8tsVOAExQoiXoi17FMp";
+  $db_name = "keyfm";
+  $conn = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
+  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE);
+  $stmt = $conn->prepare("SELECT * FROM users WHERE id = :id");
+  $stmt->bindParam(":id", $id);
+  $stmt->execute();
+  $userDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+  if ($userDetails['permRole'] == 1) {
+    $color = 'dstaff-text';
+  }
+  if ($userDetails['permRole'] == 2) {
+    $color = 'sstaff-text';
+  }
+  if ($userDetails['permRole'] == 3) {
+    $color = 'manager-text';
+  }
+  if ($userDetails['permRole'] == 4) {
+    $color = 'admin-text';
+  }
+
+  if ($userDetails['permRole'] == 5) {
+    $color = 'executive-text';
+  }
+
+  if ($userDetails['permRole'] == 6) {
+    $color = 'owner-text';
+  }
+  $span = "<span class='" . $color . " userLink' onclick='loadProfile(" . $userDetails['id'] . ")'>" . $userDetails['username'] . "</span>";
+  return $span;
+}
  ?>
 <script>
   var x, i, j, l, ll, selElmnt, a, b, c;
