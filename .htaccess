@@ -1,1 +1,42 @@
-Options -Indexes
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    RewriteRule ^(?:application|handlers|routes|config|src|storage|database|scripts)(?:/|$) - [F,L]
+    RewriteRule (^|/)\.(?!well-known/) - [F,L]
+
+    RewriteRule ^panel/logout\.php$ logout [R=301,L,NC]
+    RewriteRule ^panel/?$ app/Staff.Dashboard [R=301,L]
+    RewriteRule ^panel/(.+)$ app/$1 [R=301,L]
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} ^(.+)/$
+    RewriteRule ^ %1 [R=301,L]
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    RewriteRule ^app/?$ router.php [QSA,L]
+    RewriteRule ^app/([A-Za-z]+\.[A-Za-z0-9_]+)$ router.php [QSA,L]
+    RewriteRule ^api/page/check/([A-Za-z]+\.[A-Za-z0-9_]+)$ router.php [QSA,L]
+    RewriteRule ^api/page/([A-Za-z]+\.[A-Za-z0-9_]+)$ router.php [QSA,L]
+    RewriteRule ^api/([A-Za-z][A-Za-z0-9_]*)$ router.php [QSA,L]
+    RewriteRule ^logout/?$ router.php [QSA,L]
+    RewriteRule ^ router.php [QSA,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteRule ^profilePictures/.*\.(php|phtml|php[0-9]|phar)$ - [F,L,NC]
+</IfModule>
