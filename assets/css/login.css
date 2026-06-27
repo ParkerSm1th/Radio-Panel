@@ -1,0 +1,46 @@
+*,*::before,*::after{box-sizing:border-box}
+:root{--bg:#0c1b2d;--surface:#101f33;--line:rgba(255,255,255,.09);--text:#e8eef5;--muted:#8fa3bc;--accent:#2989eb;--accent-dim:#1f6fc4;--bad:#e60505;--ok:#2ecc71;--radius:6px}
+html,body{margin:0;min-height:100%}
+.login-page{font-family:Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.45}
+.login-shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.25rem}
+.login-card{width:min(100%,380px);background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:var(--radius);padding:1.75rem 1.5rem 1.25rem;box-shadow:0 12px 40px rgba(0,0,0,.35);transition:opacity .25s,transform .25s}
+.login-card.is-hidden{opacity:0;transform:translateY(6px);pointer-events:none}
+.login-card__header{text-align:center;margin-bottom:1rem}
+.login-card__logo{height:42px;width:auto;display:block;margin:0 auto}
+.login-card__subtitle{margin:.5rem 0 0;font-size:.875rem;color:var(--muted)}
+.login-card__avatar-wrap{width:72px;height:72px;margin:0 auto 1.25rem}
+.login-card__avatar{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--line);background:#0a1524;display:block}
+.login-alert{background:rgba(230,5,5,.12);border:1px solid rgba(230,5,5,.35);color:#ffb4b4;border-radius:var(--radius);padding:.65rem .85rem;font-size:.8125rem;margin-bottom:.85rem}
+.login-form{display:grid;gap:.85rem}
+.login-field label{display:block;font-size:.75rem;font-weight:500;color:var(--muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.04em}
+.login-field__control{position:relative}
+.login-field__control input{width:100%;background:#0a1524;border:1px solid var(--line);border-radius:var(--radius);color:var(--text);font:inherit;font-size:.9375rem;padding:.7rem 2.25rem .7rem .75rem;outline:none;transition:border-color .15s}
+.login-field__control input:focus{border-color:var(--accent)}
+.login-field__control input.is-invalid{border-color:var(--bad)}
+.login-field__control input.is-valid{border-color:var(--ok)}
+.login-field__toggle{position:absolute;right:.5rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;padding:.25rem;font-size:.875rem;line-height:1}
+.login-field__status{position:absolute;right:2rem;top:50%;transform:translateY(-50%);font-size:.75rem}
+.login-field__status.is-valid{color:var(--ok)}
+.login-field__status.is-invalid{color:var(--bad)}
+.login-submit{width:100%;border:none;border-radius:var(--radius);background:var(--accent);color:#fff;font:inherit;font-weight:600;font-size:.9375rem;padding:.75rem 1rem;cursor:pointer;margin-top:.15rem;transition:background .15s}
+.login-submit:hover:not(:disabled){background:var(--accent-dim)}
+.login-submit:disabled{opacity:.65;cursor:not-allowed}
+.login-submit.is-error{background:var(--bad)}
+.login-card__footer{margin-top:1rem;text-align:center;font-size:.75rem}
+.login-card__footer a{color:var(--muted);text-decoration:none}
+.login-card__footer a:hover{color:var(--text)}
+.login-success{position:fixed;inset:0;z-index:5;display:grid;place-items:center;background:rgba(12,27,45,.94);opacity:0;pointer-events:none;transition:opacity .3s}
+.login-success.is-visible{opacity:1;pointer-events:auto}
+.login-success__inner{text-align:center}
+.login-success__avatar{width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:.75rem;border:2px solid var(--accent)}
+.login-success h2{margin:0;font-size:1.125rem;font-weight:600}
+.login-success__hint{color:var(--muted);margin-top:.5rem;font-size:.875rem}
+.gdpr-banner{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#0a1524;border-top:1px solid var(--line);padding:.75rem 1rem;transform:translateY(100%);transition:transform .2s ease-out}
+.gdpr-banner.is-visible{transform:translateY(0)}
+.gdpr-banner__inner{max-width:720px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:.65rem 1rem;justify-content:space-between}
+.gdpr-banner p{margin:0;font-size:.8125rem;color:var(--muted);flex:1 1 200px}
+.gdpr-banner a{color:var(--accent);text-decoration:none}
+.gdpr-banner a:hover{text-decoration:underline}
+.gdpr-banner__btn{border:1px solid var(--line);border-radius:var(--radius);background:transparent;color:var(--text);font:inherit;font-size:.8125rem;font-weight:500;padding:.45rem .85rem;cursor:pointer;white-space:nowrap}
+.gdpr-banner__btn:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:480px){.login-card{padding:1.35rem 1.1rem 1rem}.gdpr-banner__inner{flex-direction:column;align-items:stretch}.gdpr-banner__btn{width:100%}}

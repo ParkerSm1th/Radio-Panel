@@ -56,6 +56,14 @@ typings/
 
 # dotenv environment variables file
 .env
+config/config.php
+
+# Runtime storage
+storage/logs/*
+!storage/logs/.gitkeep
+
+# User uploads (keep folder, ignore contents in fresh installs)
+# profilePictures/*
 
 # next.js build output
 .next
